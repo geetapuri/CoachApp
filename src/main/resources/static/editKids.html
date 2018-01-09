@@ -1,0 +1,37 @@
+<div class="container">
+    <h3>Greeting from edit Kids page</h3>
+
+    <p>Kids  </p><br>
+    <form ng-submit="submit()">
+        <p>EDIT NAME</p>
+        <input type="text" ng-model="name" value="{{name}}"><br>
+        {{name}} is currently in {{group}}
+
+        <br><br>
+
+        <p>CHOOSE NEW GROUP</p>
+        <select name="x" class="form-control" ng-model="selectedGroup" ng-options="x.groupName for x in groupList track by x.groupID" >
+            <option value=""> Select Group </option>
+        </select>
+        <br>
+
+        <input type = "submit" id="submit-btn" value="Update Student" /> 
+
+    </form>
+    <br><br>
+    <div >
+        <input type="button" id="Delete-btn" value="DELETE STUDENT" ng-click="delete()"/>
+    </div>
+    
+    <div ng-show= "resultObtainedFromServer">
+        <h3>"Updated {{result}} kid(s)"</h3>
+        
+    </div>
+    
+    <div ng-show= "resultObtainedFromDelete">
+        <h3>"Deleted {{result}} kid(s)"</h3>
+        
+    </div>
+        
+    <input type ="button" id="back-btn-del" value="Back " ng-click="goBack()"/>
+</div>      

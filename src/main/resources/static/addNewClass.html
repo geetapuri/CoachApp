@@ -1,0 +1,36 @@
+<div class="container">
+    <h3>Greeting from Add New Class page</h3>
+    
+    <br>
+    <p> Enter schedule for date: </p>
+    
+    <form ng-submit= "submit()">
+        <input type="date" ng-model= "schedule.date" value="{{schedule.date | date: 'yyyy-MM-dd' }}">
+        
+        <br><br>
+        <p>CHOOSE GROUP</p>
+            <select name="x"  ng-model="selectedGroup" ng-options="x.groupName for x in groupList track by x.groupID" >
+            <option value=""> Select Group </option>
+        </select>
+    
+        
+        <br>
+        <p> Enter Time Of Class</p>
+        
+        <input ng-focus= "fcsFillTextBox()" ng-model="schedule.time"/>
+        
+        <br><br>
+        <input type="submit" id="submit-btn" value="Add Schedule" /> 
+        
+    </form>
+    
+     
+    
+    <br><br>
+    
+    {{result}}
+    
+    <br><br>
+    <input type ="button" id="back-btn-add" value="Back " ng-click="goBack()"/>
+    
+</div>     

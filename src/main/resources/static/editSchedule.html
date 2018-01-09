@@ -1,0 +1,36 @@
+<div class="container">
+    <h3>Greeting from edit Schedule page</h3>
+
+    <p>Schedule for {{groupName}}  </p><br>
+    <form ng-submit="submit()">
+        <p>EDIT TIME</p>
+        <input type="text" ng-model="time" value="{{time}}"><br>
+        {{groupName}} is currently at {{time}} on {{date}}
+
+        <br><br>
+
+        <p>CHOOSE NEW DATE</p>
+        <input type="date" ng-model="date" value="{{date | date: 'yyyy-MM-dd'}}">
+        <br><br>
+        
+       
+        <input type = "submit" id="submit-btn" value="Update Schedule" /> 
+
+    </form>
+    <br><br>
+    <div >
+        <input type="button" id="Delete-btn" value="DELETE SCHEDULE" ng-click="delete()"/>
+    </div>
+    
+    <div ng-show= "resultObtainedFromServer">
+        <h3>"Updated {{result}} schedule"</h3>
+        
+    </div>
+    
+    <div ng-show= "resultObtainedFromDelete">
+        <h3>"Deleted {{result}} schedule"</h3>
+        
+    </div>
+    <br><br>    
+    <input type ="button" id="back-btn-del" value="Back " ng-click="goBack()"/>
+</div>      

@@ -1,0 +1,27 @@
+<div class="container">
+    <h3>Greeting from Student page</h3>
+    
+    <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th> KID ID</th>
+                    
+                    
+                        <th> KID NAME</th>
+                    
+                    
+                        <th> GROUP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in kidList" >
+                        <td>
+                            <span>{{x.kidID}}</span>
+                        </td>
+                        <td><a ui-sref="editKids({name:x.kidName})" ui-sref-active="active">{{x.kidName}}</a></td>
+                        <td><a ui-sref="editKids({group:x.groupName})" ui-sref-active="active">{{x.groupName}}</a></td>
+                </tbody>
+              
+            </table>
+    
+ </div>

@@ -1,0 +1,34 @@
+<div class="container">
+    <h3>Greeting from Add Groups page</h3>
+    
+    <form ng-submit= "submit()">
+        <input  ng-focus="fcsFillTextBox()" ng-model= "groupName" />
+        <input type="submit" id="submit-btn" value="Add Group" /> 
+        
+    </form>
+    <br>
+    
+    <p>GROUPS </p>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th> GROUP ID</th>
+                    <th> GROUP NAME</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in groupList" >
+                    <td>
+                        {{x.groupID}}
+                    </td>
+                    <td>
+                        {{x.groupName}}
+                    </td>
+                </tr>
+            </tbody>
+    </table>
+    
+    <input type ="button" id="home-btn" value="Home " ng-click="goHome()"/>
+    
+</div> 

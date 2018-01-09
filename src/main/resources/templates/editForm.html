@@ -1,0 +1,34 @@
+<!-- Form used for updation of data into database -->
+<form class="form-horizontal alert alert-warning" id="editForm" ng-submit="UpdateInfo(currentUser)" hidden>
+    
+    <h3 class="text-center">Update Student Details</h3>
+    
+    <div class="form-group">
+        <label for="Name">Student Name:</label>
+        <input type="text" class="form-control" ng-model="currentUser.kidName" value="{{currentUser.kidName}}">
+    </div>
+   
+    <div class="form-group">
+        <label for="GroupName">Group:</label>
+         {{groupList}}
+        <!--<input type="text" class="form-control" ng-model="currentUser.groupName" value="{{currentUser.groupName}}">-->
+        <select 
+            class ="form-control" ng-model="selectedGroup" 
+            ng-options=" x.groupName for x in groupList">
+            
+            <option>--</option>
+        </select>    
+    </div>
+    
+    <div class="form-group">
+    <button class="btn btn-warning" ng-disabled="kidList.$invalid" ng-click="updateMsg(currentUser.kidID)">Update</button>
+    </div>
+    
+</form>
+
+<p>CHOOSE GROUP</p>
+    <select 
+            ng-model="selectedGroup" 
+            ng-options=" x.groupName for x in groupList">
+        <option>--</option>
+    </select>

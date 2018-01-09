@@ -1,0 +1,45 @@
+<div class="container wrapper">
+        <h3>Greeting from students page</h3>
+    
+    <div class="col-md-6 col-md-offset-3">
+        
+        <!-- Include form template which is used to insert data into database -->
+        <div ng-include src="'editForm.html'"></div>
+        
+        <div class="clearfix"></div>
+        
+        <!-- Table to show employee detalis -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tr>
+                    <th>KID ID</th>
+                    <th>KID NAME</th>
+                    <th>GROUP</th>
+                    <th>EDIT</th>
+                    <th>DELETE</th>
+                </tr>
+                
+                <tr ng-repeat="x in kidList ">
+                    <td>
+                        <span>{{x.kidID}}</span>
+                    </td>
+                    <td>{{x.kidName | uppercase}}</td>
+                    <td>{{x.groupName}}</td>
+                    <td>
+                        <button class="btn btn-warning" ng-click="editInfo(x)" 2title="Edit"><span class="glyphicon glyphicon-edit"></span></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" ng-click="deleteInfo(x)" title="Delete"><span class="glyphicon glyphicon-trash"></span></button>
+                    </td>
+                </tr>
+                
+            </table>
+            
+        </div>
+        
+        
+        
+    </div>
+                    
+        
+</div>      

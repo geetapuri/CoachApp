@@ -1,0 +1,29 @@
+<div class="container">
+    <h3>Greeting from Add Schedule page</h3>
+    
+    <br>
+    <p> Enter schedule for date: </p>
+    
+    <form ng-submit= "submit()">
+        <input type="date" ng-model= "schedule.date" value="{{schedule.date | date: 'yyyy-MM-dd' }}">
+        
+        <br>
+        <p>CHOOSE GROUP</p>
+            <select 
+                    ng-model="selectedGroup" 
+                    ng-options=" x.groupName for x in groupList">
+                <option>--</option>
+            </select>
+        <br>
+        <p> Enter Time</p>
+        
+        <input type="text" ng-model="schedule.time" value="<<time>>" >
+        
+        <br>
+        <input type="submit" id="submit-btn" value="Add Schedule" /> 
+        
+    </form>
+    
+    {{result}}
+    
+</div>     

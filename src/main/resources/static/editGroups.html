@@ -1,0 +1,30 @@
+<div class="container">
+    <h3>Greeting from edit Groups page</h3>
+
+    <p>Groups  </p><br>
+    <form ng-submit="submit()">
+        <p>EDIT NAME</p>
+        <input type="text" ng-model="groupName" value="{{groupName}}"><br>
+        
+        <br><br>
+{{groupName}}
+        <input type = "submit" id="submit-btn" value="Update Group" /> 
+
+    </form>
+    <br><br>
+    <div >
+        <input type="button" id="Delete-btn" value="DELETE Group" ng-click="delete()"/>
+    </div>
+    
+    <div ng-show= "resultObtainedFromServer">
+        <h3>"Updated {{result}} Group(s)"</h3>
+        
+    </div>
+    
+    <div ng-show= "resultObtainedFromDelete">
+        <h3>"Deleted {{result}} Group(s)"</h3>
+        
+    </div>
+        
+    <input type ="button" id="back-btn" value="Back " ng-click="goBack()"/>
+</div>      

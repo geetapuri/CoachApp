@@ -1,0 +1,49 @@
+<div class="container">
+    <h3>Greeting from Add Kids page</h3><br>
+    
+    <br>
+    
+    <p>CHOOSE GROUP</p>
+   
+    <select name="x"  ng-model="selectedGroup" ng-options="x.groupName for x in groupList track by x.groupID" >
+            <option value=""> Select Group </option>
+        </select>
+    
+    
+    <br>
+    
+    <p>CHOOSE PACKAGE</p>
+    <select name="x" ng-model="selectedPackage" ng-options="x.packageName for x in packageList track by x.packageID" >
+            <option value=""> Select Package </option>
+        </select>
+    
+    <br>
+    
+    <br>
+    <form ng-submit= "submit()">
+        <input type="text" ng-model="kidName"value="<<Enter Kid Name >>" >
+        <input type = "submit" id="submit-btn" value="Add Kid" /> 
+    </form>
+    
+    <br>
+    <p> Kids in {{selectedGroup}} are </p>
+    
+    <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th> KID NAME</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in kidList" >
+                    <td>
+                        {{x.kidName | uppercase}}
+                    </td>
+                </tr>
+            </tbody>
+    </table>
+    
+    <input type ="button" id="back-btn-add" value="Back " ng-click="goBack()"/>
+    
+</div> 

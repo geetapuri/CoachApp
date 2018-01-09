@@ -1,0 +1,34 @@
+
+  <div class="container">
+        <h3>Greeting from Home page</h3>
+    
+        <div ng-show="authenticated">
+            
+            <ul class= "nav nav-pills" role="tablist">
+                
+                <li><a ui-sref="getCalendar" ui-sref-active="active">View Calendar</a></li>
+                
+                <li><a ui-sref="attendance" ui-sref-active='active' >Manage Fees</a></li>
+
+               <!-- <calendar selected="day"></calendar>
+                <span>Selected date: <b>{{day.format('dddd, MMMM Do YYYY')}}</b></span>-->
+
+
+                <li><a ui-sref="manageClasses" ui-sref-active='active'>Manage Classes</a></li>
+                
+                <li><a ui-sref="manageStudents" ui-sref-active='active' >Manage Students</a></li>
+                
+                <br><br>
+
+            </ul>    
+        </div>
+        
+    <div><a ui-sref="logout" ui-sref-active='active' >Logout</a></div>
+      
+    <div  ng-show="!authenticated">
+        <p>Login to see your greeting</p>
+    </div>
+  </div>  
+      
+  
+    

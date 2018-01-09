@@ -1,0 +1,39 @@
+<div class="container">
+    <h3>Greeting from Student page</h3>
+    
+    <div >
+        <ul class= "nav nav-pills" role="tablist">
+                
+                <li><a ui-sref="addKids" ui-sref-active="active">Add Kid</a></li>
+        </ul>
+    </div>
+    <p>Click the Student name to Edit/Delete</p>
+    
+    <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th> KID ID</th>
+                    
+                    
+                        <th> KID NAME</th>
+                    
+                    
+                        <th> GROUP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in kidList" >
+                        <td>
+                            <span>{{x.kidID}}</span>
+                        </td>
+                        <td><a ui-sref="editKids({name:x.kidName, kidID:x.kidID, group:x.groupName, groupID:x.groupID})" ui-sref-active="active">{{x.kidName | uppercase}}</a></td>
+                        <td>
+                            <span>{{x.groupName}}</span>
+                        </td>
+                </tbody>
+              
+            </table>
+    
+    <input type ="button" id="back-btn-student" value="Back " ng-click="goBack()"/>
+    
+ </div>

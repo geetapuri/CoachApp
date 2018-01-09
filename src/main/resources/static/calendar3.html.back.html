@@ -1,0 +1,50 @@
+<div class="container">
+    <h3>Greeting from Calendar page</h3>
+    
+    <span>
+    <calendar selected="day" callback-fn="ctrlClick(arg1)">
+          </calendar>
+    <br>
+    <button ng-click="ctrlClickToday()">TODAY</button>
+        
+    </span>    
+    <br>
+    <span>Selected date: <b>{{day.format('dddd, MMMM Do YYYY')}}</b></span>
+    
+    <br>
+        <!--<form ng-submit="submit()">
+           
+            <input type="text" ng-model="day" value="{{day.format('YYYY-MM-D') }}"><br>
+            <input type = "submit" id="submit-btn" value="Get Calendar" /> 
+            
+        </form>
+-->
+          
+      <br>
+            <p>The schedule  for today is   </p><br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th> TIME</th>
+                    
+                    
+                        <th> DATE</th>
+                    
+                    
+                        <th> GROUP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in calendarList" >
+                        <td><a ui-sref="getKidsInGroup({date:x.date, groupID:x.groupID})" ui-sref-active="active">{{x.time}}</a></td>
+                        <td><a ui-sref="getKidsInGroup({date:x.date, groupID:x.groupID})" ui-sref-active="active">{{x.date}}</a></td>
+                        <td><a ui-sref="getKidsInGroup({date: x.date, groupID:x.groupID})" ui-sref-active="active">{{x.groupName}}</a></td>
+                </tbody>
+                
+            
+            
+            </table>
+            
+            
+
+        

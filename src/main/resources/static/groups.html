@@ -1,0 +1,35 @@
+<div class="container">
+    <h3>Greeting from Groups page</h3>
+    
+    <div >
+        <ul class= "nav nav-pills" role="tablist">
+                
+                <li><a ui-sref="addGroups" ui-sref-active="active">Add Group</a></li>
+        </ul>
+    </div>
+    
+    <p>Click the Group Name to Edit/Delete</p>
+    
+    <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th> GROUP ID</th>
+                    
+                        <th> GROUP NAME</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in groupList" >
+                        <td>
+                            <span>{{x.groupID}}</span>
+                        </td>
+                        <td><a ui-sref="editGroups({groupName:x.groupName, groupID:x.groupID})" ui-sref-active="active">{{x.groupName}}</a></td>
+                        
+                </tbody>
+              
+            </table>
+    
+    <input type ="button" id="back-btn-group" value="Back " ng-click="goBack()"/>
+    
+ </div>

@@ -1,0 +1,52 @@
+<div class="container">
+    <h3>Greeting from Manage Schedule page</h3>
+    
+    <div >
+        <ul class= "nav nav-pills" role="tablist">
+                
+                <li><a ui-sref="addNewClass" ui-sref-active="active">Add Schedule</a></li>
+        </ul>
+    </div>
+    <!--<p>Show Schedule for Today or Choose Date</p>
+    
+   <span> <button ng-click="getCalendarForToday()">TODAY {{date | date:'yyyy-MM-dd'}}</button></span>
+    <br><br>
+    <span><form ng-submit="submit()">
+           
+        <input type="date" ng-model="calendar.date" value="{{calendar.date | date: 'yyyy-MM-dd' }}"><br><br>
+         
+        <input type = "submit" id="submit-btn" value="Get Calendar" /> 
+            
+    </form></span>
+    <br>-->
+    
+    <p>The complete schedule  is   </p><br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th> TIME</th>
+                    
+                    
+                        <th> DATE</th>
+                    
+                    
+                        <th> GROUP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="x in calendarList" >
+                        <td>{{x.time}}</td>
+                        <td>{{x.date}}</td>
+                        <td><a ui-sref="editSchedule({time: x.time, date: x.date, groupID:x.groupID, groupName:x.groupName, calendarID:x.calendarID})" ui-sref-active="active">{{x.groupName}}</a></td>
+                </tbody>
+                
+            
+            
+            </table>
+            
+            
+    
+    
+    <input type ="button" id="back-btn-student" value="Back " ng-click="goBack()"/>
+    
+ </div>
