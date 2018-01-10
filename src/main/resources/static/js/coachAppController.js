@@ -375,7 +375,7 @@ $scope.submit = function(){
                        'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'
                     }
                   };
-        alert("sending request to update attendance table");
+        alert("sending request to update attendance ");
         
         $http(request).success(function(data) {
                 
