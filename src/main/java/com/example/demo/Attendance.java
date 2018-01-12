@@ -4,9 +4,9 @@ import java.sql.Date;
 
 public class Attendance {
 	
-	private Date dateOfAttendance;
-	private String groupOfKids_GroupID;
-	private String kid_KidID;
+	private java.sql.Date date;
+	private String groupID;
+	private String kidID;
 	private String presentAbsent;
 	private String attendanceID;
 	private String kidName;
@@ -24,23 +24,23 @@ public class Attendance {
 	public void setKidName(String kidName) {
 		this.kidName = kidName;
 	}
-	public Date getDateOfAttendance() {
-		return dateOfAttendance;
+	public java.sql.Date getDate() {
+		return date;
 	}
-	public void setDateOfAttendance(Date dateOfAttendance) {
-		this.dateOfAttendance = dateOfAttendance;
+	public void setDate(java.sql.Date date) {
+		this.date = date;
 	}
-	public String getGroupOfKids_GroupID() {
-		return groupOfKids_GroupID;
+	public String getGroupID() {
+		return groupID;
 	}
-	public void setGroupOfKids_GroupID(String groupOfKids_GroupID) {
-		this.groupOfKids_GroupID = groupOfKids_GroupID;
+	public void setGroupID(String groupID) {
+		this.groupID = groupID;
 	}
-	public String getKid_KidID() {
-		return kid_KidID;
+	public String getKidID() {
+		return kidID;
 	}
-	public void setKid_KidID(String kid_KidID) {
-		this.kid_KidID = kid_KidID;
+	public void setKidID(String kidID) {
+		this.kidID = kidID;
 	}
 	public String getPresentAbsent() {
 		return presentAbsent;

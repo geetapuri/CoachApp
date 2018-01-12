@@ -16,14 +16,13 @@ public class AttendanceMapper implements RowMapper {
 		// TODO Auto-generated method stub
 		logger.info("in Attendance mapper maprow");
 		Attendance attendance = new Attendance();
-		attendance.setKidName(rs.getString("KIDNAME"));
-		attendance.setGroupName(rs.getString("GROUPNAME"));
+		attendance.setKidID(rs.getString("KID_KIDID"));
+		attendance.setGroupID(rs.getString("GROUPOFKIDS_GROUPID"));
 		attendance.setPresentAbsent(rs.getString("PRESENTABSENT"));
-		attendance.setKid_KidID(rs.getString("KIDID"));
-		attendance.setDateOfAttendance(rs.getDate("DATEOFATTENDANCE"));
+		attendance.setDate(rs.getDate("DATEOFATTENDANCE"));
 		
-		logger.info("date received - "+ attendance.getDateOfAttendance());
-		logger.info("kid name received - "+ attendance.getKidName());
+		logger.info("date received - "+ attendance.getDate());
+		logger.info("kid id received - "+ attendance.getKidID());
 		
 		return attendance;
 

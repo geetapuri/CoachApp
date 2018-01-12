@@ -28,9 +28,10 @@ public class KidJDBCTemplate implements KidDAO {
 		// TODO Auto-generated method stub
 		logger.info("calling getKids(groupID) now for groupID = "+ groupID);
 		
-		String SQL = "select KID.KidName, KID.KidID, KID.GROUPOFKIDS_GroupID, KID.PACKAGE_PACKAGEID from KID, GROUPOFKIDS"
-				+ " where KID.groupOfkids_groupID= GROUPOFKIDS.GroupID"
-				+ " AND GROUPOFKIDS.GroupID = ?  ";
+		String SQL = "select KID.KidName, KID.KidID, KID.GROUPOFKIDS_GroupID, KID.PACKAGE_PACKAGEID  "
+				+ " from KID"
+				+ " where "
+				+ " KID.GROUPOFKIDS_GROUPID = ?  ";
 		
 	    List <Kid> kid = jdbcTemplateObject.query(SQL, new Object[] {groupID}, new KidMapper());
 	    

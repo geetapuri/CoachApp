@@ -75,8 +75,17 @@ public String addSchedule(Schedule schedule) {
 	
 	if (resultOfQuery!=0) {
 		
+		String SQL2 = "INSERT into Attendance (DateOfAttendance, GROUPOFKIDS_GroupID, " + 
+				" KID_KidID, PresentAbsent) SELECT  ?, ?, KIDID , 'A' " + 
+				" FROM KID where KID.GROUPOFKIDS_GroupID = ? ";
 		
+		int resultOfQuery2 = jdbcTemplateObject.update(SQL2, schedule.getDate(), schedule.getGroupID(), schedule.getGroupID());
+		
+		logger.info("result of query after insert into attendance = "+ resultOfQuery2);
+		
+		if (resultOfQuery!=0)
 		return "SUCCESS";
+		else return "Problem in updating attendance";
 		}
 		else return "CANT UPDATE SCHEDULE";
 }
@@ -94,8 +103,6 @@ public String updateSchedule(Schedule schedule) {
 	logger.info("result of query after insert into calendar = "+ resultOfQuery);
 	
 	if (resultOfQuery!=0) {
-		
-		
 		return "SUCCESS";
 		}
 		else return "CANT UPDATE SCHEDULE";

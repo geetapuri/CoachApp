@@ -251,13 +251,13 @@ coachApp.controller('kids', function($scope, $http, $stateParams, $filter, $stat
     
     alert("preparing to query for GroupID = "+ groupID);
     
-    var checkForAttendance = function(){
-        alert("in fn checkForAttendance()");
+    var checkForAttendance = function(dateToSend, groupIDToSend){
+        alert("in fn checkForAttendance() with date,groupID = "+dateToSend + groupIDToSend);
         var request = {
                         method: "POST",
                         url: "/checkAttendance",
-                        data: { groupID : $scope.groupID,
-                                date: dateForAttendance},
+                        data: { groupID : groupIDToSend,
+                                date: dateToSend},
 
                         headers: {
                            "Solace-Reply-Wait-Time-In-ms":"50000" ,
@@ -268,34 +268,33 @@ coachApp.controller('kids', function($scope, $http, $stateParams, $filter, $stat
 
 
         alert("http request with date = "+request.data.date );
+        alert("http request with groupID = " + request.data.groupID);
     
         $http(request).success(function(data) {
                 
             alert("in suceess http request for checkAttendance");
             $scope.attendanceList = data.attendanceList;
             
-            if($scope.attendanceList){
-                $scope.check=true;
-                alert("setting check as true");
-                return true;
-            }
-            else {
-                $scope.check=false;
-                alert("setting check as false");
-                return false;
-            }
+            $scope.kidsList.forEach(function (x) {
+                $scope.attendanceList.forEach(function (y) {
+                    if (y.presentAbsent=="P") {
+                        x.checked=true;
+                        x.present="P";
+                    }else {
+                        x.checked=false;
+                        x.present="A";
+                    }
+                })
+            });
             
             
-        })
-        .error(function(data){
-            alert("in error for checkAttendance");
-            return false;
+            
+           
         });
         
+        
     }
-   //check attendance here first.. if not marked, get kids in group to mark their attendance
-  
-        var request = {
+    var request = {
                         method: "POST",
                         url: "/getKidsInGroup",
                         data: { groupID : $scope.groupID},
@@ -308,52 +307,18 @@ coachApp.controller('kids', function($scope, $http, $stateParams, $filter, $stat
                       };
 
 
-            alert("sending http request with groupID = "+ $scope.groupID);
+        alert("sending http request with groupID = "+ $scope.groupID);
     
         $http(request).success(function(data) {
                 
-            alert("in suceess http request");
+            alert("in suceess http request of getKidsInGroup");
                 
             $scope.kidsList = data.kidsList;
-            alert("trying the cb");
                 
-                //alert("got kidName as " + data.kidsList.kidName);
-            $scope.selection=[];
+            checkForAttendance(dateForAttendance, $scope.groupID);
             
-            
-            //json object of all kids with all absent
-
-            $scope.toggleSelection = function toggleSelection(kidID) {
-                var idx = $scope.selection.indexOf(kidID);
-                var item= $filter('filter') ($scope.kidsList, {
-                        kidID: kidID
-            });
-
-            alert("index is " + idx);
-
-                // currently selected - uncheck
-            if(idx > -1){
-                alert("unchecked ="+kidID);
-                $scope.selection.splice(idx,1);
-                    
-                item[0].present="A";
-                    
-                    //find the kid and mark absent
-            }
-
-                //newly selected
-            else {
-                alert("checked ="+kidID);
-                $scope.selection.push(kidID);
-                item[0].present="P";
-                    //$scope.selection.
-                    //find the kid and mark present
-            }
-        };
-
-        
                
-    });
+        });
 
     
 $scope.submit = function(){
@@ -361,8 +326,17 @@ $scope.submit = function(){
     alert("save the checkbox data in attendance table");
         
         //  send the selection list back to insert the names of present kids
-        
-        var request = {
+    alert("on submit of mark attendance");
+    $scope.kidsList.forEach(function (x) {
+                //alert(x.kidName, x.checked);
+                if(x.checked==true){
+                    alert("found a check");
+                    x.present="P";
+                }else {
+                    x.present="A";
+                }
+    });
+    var request = {
                     method: "POST",
                     url: "/markAttendance",
                     data: { kidsList : $scope.kidsList,

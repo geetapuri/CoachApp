@@ -136,7 +136,7 @@ public class CoachAppApplication {
 	    Map<String,Object> model = new HashMap<String,Object>();
 	    logger.info("check attendance landed");
 		
-	    Date date = data.getDateOfAttendance();
+	    Date date = data.getDate();
 	   logger.info("First use of logger! date = "+ date);
 		
 	    //ToDO 

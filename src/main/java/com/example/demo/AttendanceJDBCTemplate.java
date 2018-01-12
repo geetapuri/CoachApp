@@ -42,7 +42,10 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 		
 	
 		
-		String SQL = "insert into Attendance (DateOfAttendance, GROUPOFKIDS_GroupID, KID_KidID, PresentAbsent) values (?,?,?,?)";
+		String SQL = "insert into Attendance (DateOfAttendance, GROUPOFKIDS_GroupID, KID_KidID, PresentAbsent) "
+				+ " values (?,?,?,?) "
+				+ " ON DUPLICATE KEY UPDATE " 
+				+ " PRESENTABSENT= values(PRESENTABSENT)";
 		
 	    
 		jdbcTemplateObject.batchUpdate( SQL, new BatchPreparedStatementSetter() {
@@ -59,6 +62,9 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				ps.setString(3,  kids.get(i).getKidID());
 				ps.setString(4, kids.get(i).getPresent());
 				//ps.setInt(5, i+11);
+				
+				logger.info("kid ID = "+ kids.get(i).getKidID());
+				logger.info("kid present = "+ kids.get(i).getPresent());
 				
 			}
 			@Override
@@ -77,17 +83,14 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 	public List<Attendance> checkAttendance(Attendance data) {
 		// TODO Auto-generated method stub
 		
-		logger.info("date to be queried = " + data.getDateOfAttendance());
-		logger.info("Group ID to be queried = " + data.getGroupOfKids_GroupID());
+		logger.info("date to be queried = " + data.getDate());
+		logger.info("Group ID to be queried = " + data.getGroupID());
 
-		String SQL = "SELECT A.PRESENTABSENT, A.DATEOFATTENDANCE, G.GROUPNAME, K.KIDNAME, K.KIDID "
-				+ " FROM ATTENDANCE A, GROUPOFKIDS G, KID K " + 
-				" WHERE  A.KID_KidID = K.KIDID " + 
-				" AND 	G.GROUPID=? " + 
-				" AND  A.DateOfAttendance=?" ;
+		String SQL = "SELECT * FROM ATTENDANCE WHERE GROUPOFKIDS_GROUPID=?"
+				+ " AND DATEOFATTENDANCE=?" ;
 		
 	    List <Attendance> attendance = jdbcTemplateObject.query(SQL,new Object[] 
-	    		{data.getGroupOfKids_GroupID() ,data.getDateOfAttendance()},new AttendanceMapper());
+	    		{data.getGroupID() ,data.getDate()},new AttendanceMapper());
 	    
 	   
 		return attendance;

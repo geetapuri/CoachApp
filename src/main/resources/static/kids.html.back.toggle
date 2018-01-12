@@ -2,6 +2,10 @@
 
     <h3>Greeting from Kids page via GIT</h3>
 
+    <h3>Greeting from Kids page from GIT</h3>
+ 
+    {{kidsList}}
+   
         <form ng-submit="submit()">
                 <table class="table table-bordered">
                     <thead>
@@ -14,26 +18,28 @@
 
                         </tr>
                     </thead>
-                    
+                    {{selection}}
                     <tbody>
                         <tr ng-repeat="x in kidsList " >
                             <td>{{x.kidID}}</td>
                             <td>{{x.kidName}}</td>
                             <td><input type="checkbox"
-                            ng-model="x.checked"> {{x.kidName}}</td>
+                            value="{{x.kidID}}"
+                            ng-checked= "selection.indexOf(x.kidID)>-1" 
+                            ng-click= "toggleSelection(x.kidID)"> </td>
 
                     </tbody>
 
 
 
                 </table>
-            
-           <br><br>
+
+           
             <p> <input type = "submit" id="submit-btn" value="SaveAttendance" /> </p>
 
         </form>
     
-    {{kidsList}}
+    
     <input type ="button" id="back-btn-attendance" value="Back " ng-click="goBack()"/>
     
 </div>
