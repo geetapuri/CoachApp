@@ -38,7 +38,7 @@ private static Logger logger = LogManager.getLogger(GroupJDBCTemplate.class);
 		
 		if (resultOfQuery!=0) {
 			
-			String SQL2 = "Select * from GroupOfKids ";
+			String SQL2 = "Select * from GROUPOFKIDS ";
 			List<GroupOfKids> groupList =  jdbcTemplateObject.query(SQL2, new GroupMapper());
 			
 			return groupList;

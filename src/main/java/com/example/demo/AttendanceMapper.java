@@ -21,8 +21,8 @@ public class AttendanceMapper implements RowMapper {
 		attendance.setPresentAbsent(rs.getString("PRESENTABSENT"));
 		attendance.setDate(rs.getDate("DATEOFATTENDANCE"));
 		
-		logger.info("date received - "+ attendance.getDate());
-		logger.info("kid id received - "+ attendance.getKidID());
+		logger.info("date received : "+ attendance.getDate());
+		logger.info("kid id received : "+ attendance.getKidID());
 		
 		return attendance;
 

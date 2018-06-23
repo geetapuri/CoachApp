@@ -9,6 +9,7 @@ public class Schedule {
 	private String groupName;
 	private String groupID;
 	private String calendarID;
+	private String kidID;
 	
 	public String getCalendarID() {
 		return calendarID;
@@ -39,6 +40,12 @@ public class Schedule {
 	}
 	public void setGroupID(String string) {
 		this.groupID = string;
+	}
+	public String getKidID() {
+		return kidID;
+	}
+	public void setKidID(String kidID) {
+		this.kidID = kidID;
 	}
 	
 }

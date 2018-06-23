@@ -13,4 +13,6 @@ public interface KidDAO {
 	public List<Kid> addKid(Kid kid);
 	
 	public List<Kid> getKids();
+	
+	public List<Kid> getKidsParent(String parentID);
 }

@@ -1,0 +1,69 @@
+<div class="container">
+        <h3>Greeting from manage Fee page</h3>
+        <h2> To view Fee paid, select kid</h2>
+    
+    <!-- list of kids -->
+    <p>CHOOSE KID</p>
+        <select name="x"  ng-model="selectedKid" ng-options="x.kidName for x in kidList track by x.kidID" >
+            <option value=""> Select Kid </option>
+        </select>
+    
+    <!-- show attendance for selected kid - choose duration(next enhancement) -->
+    <br><br>
+    <form ng-submit= "submit()">
+        <input type="submit" id="submit-btn" value="View Fees" />
+    </form>
+    
+    <div ng-show= "resultObtainedFromServer">
+        <h3>The Fee schedule for {{selectedKid.kidName}}  is </h3>
+    
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th>DATE</th>
+
+                            <th>ATTENDANCE </th>
+                            
+                            <th>FEE PAID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in feeList" >
+                            
+                            <td>{{x.dateOfAttendance}}</td>
+                            <td>{{x.present}}</td>
+                            <td>{{x.feePaid}}</td>
+                        </tr>
+                    </tbody>
+
+
+
+                </table>
+    </div>
+    
+    <h2> To pay Fees, select kid</h2>
+    
+    <!-- list of kids -->
+    <p>CHOOSE KID</p>
+        <select name="x"  ng-model="selectedKid" ng-options="x.kidName for x in kidList track by x.kidID" >
+            <option value=""> Select Kid </option>
+        </select>
+    
+        <select name="x" ng-model="selectedDate" ng-options="x.dateOfAttendance for x in feeList track by x.dateOfAttendance">
+            <option value=""> Select Date </option>
+        </select>
+    <br><br>
+    <form ng-submit= "submitPay()">
+        <input type="submit" id="submit-btn" value="Pay Fees" />
+    </form>
+    
+    <div ng-show= "resultObtainedFromServer">
+        <br><br>
+        {{result}}
+        
+    </div>
+    <br><br>
+     <input type ="button" id="back-btn-cal" value="Back " ng-click="goBack()"/>       
+        
+</div>      

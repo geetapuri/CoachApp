@@ -13,6 +13,8 @@ public interface CalendarDAO {
 	
 	public List<Schedule> getSchedule();
 	
+	public List<Schedule> getSchedule(Schedule schedule);
+	
 	public String updateSchedule(Schedule schedule);
 	
 	public String addSchedule(Schedule schedule);

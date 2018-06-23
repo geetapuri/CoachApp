@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import java.sql.SQLException;
+
+
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -11,6 +13,10 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.mysql.jdbc.PreparedStatement;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+
 
 public class AttendanceJDBCTemplate implements AttendanceDAO{
 	
@@ -42,16 +48,12 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 		
 	
 		
-		String SQL = "insert into Attendance (DateOfAttendance, GROUPOFKIDS_GroupID, KID_KidID, PresentAbsent) "
+		String SQL = "insert into ATTENDANCE (DateOfAttendance, GROUPOFKIDS_GroupID, KID_KidID, PresentAbsent) "
 				+ " values (?,?,?,?) "
 				+ " ON DUPLICATE KEY UPDATE " 
 				+ " PRESENTABSENT= values(PRESENTABSENT)";
-		
-	    
+
 		jdbcTemplateObject.batchUpdate( SQL, new BatchPreparedStatementSetter() {
-
-			
-
 			@Override
 			public void setValues(java.sql.PreparedStatement ps, int i) throws SQLException {
 				// TODO Auto-generated method stub
@@ -73,12 +75,44 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				return kids.size();
 			}
 			
+		});
+		
+		String SQL2 = "INSERT INTO FEEMGMT (DateOfAttendance, Present, FeePaid, KidID, FeeID)"
+				+ " values(?,?,?,?,?)  "
+				+ " ON DUPLICATE KEY UPDATE "
+				+ " Present = values(Present)";
+		
+		jdbcTemplateObject.batchUpdate( SQL2, new BatchPreparedStatementSetter() {
+			@Override
+			public void setValues(java.sql.PreparedStatement ps, int i) throws SQLException {
+				// TODO Auto-generated method stub
+				
+				//((List<Integer>) data).get(i);
+				ps.setDate(1, data.getDate());
+				ps.setString(2, kids.get(i).getPresent());
+				ps.setString(3, "N");
+				ps.setString(4,  kids.get(i).getKidID());
+				ps.setString(5, "1");
+				//ps.setInt(5, i+11);
+				
+				logger.info("kid ID = "+ kids.get(i).getKidID());
+				logger.info("kid present = "+ kids.get(i).getPresent());
+				
+			}
+			@Override
+			public int getBatchSize() {
+				// TODO Auto-generated method stub
+				return kids.size();
+			}
+			
 				
 			
 		});
 		
 		return result ="Success";
 	}
+	
+	
 
 	public List<Attendance> checkAttendance(Attendance data) {
 		// TODO Auto-generated method stub
@@ -91,6 +125,20 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 		
 	    List <Attendance> attendance = jdbcTemplateObject.query(SQL,new Object[] 
 	    		{data.getGroupID() ,data.getDate()},new AttendanceMapper());
+	    
+	   
+		return attendance;
+	}
+	
+	public List<Attendance> viewAttendanceKid(Attendance data) {
+		// TODO Auto-generated method stub
+		
+		
+		String SQL = "SELECT * FROM ATTENDANCE WHERE KID_KidID=? ORDER BY "
+				+ " DateOfAttendance DESC" ;
+		
+	    List <Attendance> attendance = jdbcTemplateObject.query(SQL,new Object[] 
+	    		{data.getKidID() },new AttendanceMapper());
 	    
 	   
 		return attendance;

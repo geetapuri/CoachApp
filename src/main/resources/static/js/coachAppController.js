@@ -1,6 +1,10 @@
 coachApp.controller('home', function($scope, $http, $rootScope, $location) {
     alert("inside home controller");
     
+    $scope.captureImage = function() {
+        $scope.message="Button clicked";
+    };
+    
           var request = {
                     method: "POST",
                     url: "/logout",
@@ -832,27 +836,15 @@ coachApp.controller('manageStudents', function($scope, $http, $state) {
 
 });
 
-coachApp.controller('attendance', function($scope, $http) {
-    alert("inside attendance  controller");
-    //$scope.calendar.date = "Hello, You need to check the calendar for date?";
+coachApp.controller('viewAttendance', function($scope, $http) {
+    alert("inside view attendance  controller");
     
-    //alert("Kids name : "+ $scope.kidname);
-   $scope.groupName = "<<GroupName>>"
+    alert("getting the kids in drop down list");
     
-    $scope.submit = function(){
-        //var data = this.formData;
-        //TODO get the kids name and perform DB call on the child's name
-        
-        
-        alert("Group Name to add : " + $scope.groupName);
-        
-        
-        //$scope.objectValue.data = $scope.calendar.date;
-	  
-          var request = {
+    var request = {
                     method: "POST",
-                    url: "/addGroup",
-                    data: { groupName: $scope.groupName},
+                    url: "/getKids",
+                    data: { user: "gen1"},
 
                     headers: {
                        "Solace-Reply-Wait-Time-In-ms":"50000" ,
@@ -861,23 +853,126 @@ coachApp.controller('attendance', function($scope, $http) {
                     }
                   };
 
+                $http(request).success(function(data) {
+                    alert("in suceess http request for getKids in view Attendance");
+                    $scope.kidList = data.kidList;    
+                    $scope.selectedKid = {kidID:$scope.kidList[0].kidID};
+            
+                });
+      
+    $scope.submit = function(){
+        alert("View Attendance For : " + $scope.selectedKid.kidID);
+        
+        var request = {
+                    method: "POST",
+                    url: "/viewAttendanceKid",
+                    data: { kidID: $scope.selectedKid.kidID},
 
-            
-            $http(request).success(function(data) {
-                alert("in suceess http request");
-                
-                $scope.groupList = data.groupList;
-                
-                
-                
-            });
-            
+                    headers: {
+                       "Solace-Reply-Wait-Time-In-ms":"50000" ,
+                       'Access-Control-Allow-Origin' : '*',
+                       'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'
+                    }
+                  };
         
+        alert("sending kidID as : " +request.data.kidID );
         
+        $http(request).success(function(data) {
+            alert("in suceess http request for submit of view Attendance fn");
+                
+            $scope.attendance = data.attendance;
+            $scope.resultObtainedFromServer = true;
+               
+        });
     }
-    
 
 });
+
+coachApp.controller('manageFees', function($scope, $http, $rootScope, $state) {
+    alert("inside manageFees  controller");
+    
+    
+    var request = {
+                    method: "POST",
+                    url: "/getKids",
+                    data: { user: "gen1"},
+
+                    headers: {
+                       "Solace-Reply-Wait-Time-In-ms":"50000" ,
+                       'Access-Control-Allow-Origin' : '*',
+                       'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'
+                    }
+                  };
+
+                $http(request).success(function(data) {
+                    alert("in suceess http request for getKids in view Attendance");
+                    $scope.kidList = data.kidList;    
+                    $scope.selectedKid = {kidID:$scope.kidList[0].kidID};
+            
+                });
+      
+    $scope.submit = function(){
+        alert("View Fees For : " + $scope.selectedKid.kidID);
+        
+        var request = {
+                    method: "POST",
+                    url: "/viewFees",
+                    data: { kidID: $scope.selectedKid.kidID},
+
+                    headers: {
+                       "Solace-Reply-Wait-Time-In-ms":"50000" ,
+                       'Access-Control-Allow-Origin' : '*',
+                       'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'
+                    }
+                  };
+        
+        alert("sending kidID as : " +request.data.kidID );
+        
+        $http(request).success(function(data) {
+            alert("in suceess http request for submit of view fees fn");
+                
+            $scope.feeList = data.feeList;
+            $scope.selectedDate = {dateOfAttendance:$scope.feeList[0].dateOfAttendance};
+            $scope.resultObtainedFromServer = true;
+               
+        });
+    }
+    
+    $scope.submitPay = function(){
+        alert("Pay Fee For : " + $scope.selectedKid.kidID);
+        
+        var request = {
+                    method: "POST",
+                    url: "/payFees",
+                    data: { kidID: $scope.selectedKid.kidID, 
+                            dateOfAttendance: $scope.selectedDate.dateOfAttendance},
+
+                    headers: {
+                       "Solace-Reply-Wait-Time-In-ms":"50000" ,
+                       'Access-Control-Allow-Origin' : '*',
+                       'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT'
+                    }
+                  };
+        
+        alert("sending date as : " +request.data.dateOfAttendance );
+        
+        $http(request).success(function(data) {
+            alert("in suceess http request for submit of pay fees fn");
+                
+            $scope.result = data.result;
+            $scope.resultObtainedFromServerPayment = true;
+               
+        });
+    }
+    
+    $scope.goBack = function() {
+        $rootScope.authenticated=true;
+        $state.go("home");
+    }
+
+
+});
+
 
 coachApp.controller('groups', function($scope, $http, $state, $rootScope) {
     alert("inside manageGroups  controller");

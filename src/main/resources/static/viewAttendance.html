@@ -1,0 +1,43 @@
+<div class="container">
+        <h3>Greeting from attendance page</h3>
+        <h2> To view attendance, select kid</h2>
+    
+    <!-- list of kids -->
+    <p>CHOOSE KID</p>
+        <select name="x"  ng-model="selectedKid" ng-options="x.kidName for x in kidList track by x.kidID" >
+            <option value=""> Select Kid </option>
+        </select>
+    
+    <!-- show attendance for selected kid - choose duration(next enhancement) -->
+    <br><br>
+    <form ng-submit= "submit()">
+        <input type="submit" id="submit-btn" value="View Attendance" />
+    </form>
+    
+    <div ng-show= "resultObtainedFromServer">
+        <h3>The attendance for {{selectedKid.kidName}}  is </h3>
+    
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th> DATE</th>
+
+
+                            <th> ATTENDANCE </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in attendance" >
+                            <td>{{x.date}}</td>
+                            <td>{{x.presentAbsent}}</td>
+                        </tr>
+                    </tbody>
+
+
+
+                </table>
+    </div>
+            
+        
+</div>      

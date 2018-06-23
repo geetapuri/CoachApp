@@ -54,7 +54,7 @@ public class KidJDBCTemplate implements KidDAO {
 		
 		if (resultOfQuery!=0) {
 			
-			String SQL2 = "Select * from Kid where GROUPOFKIDS_GROUPID = ? ";
+			String SQL2 = "Select * from KID where GROUPOFKIDS_GROUPID = ? ";
 			List<Kid> kids =  jdbcTemplateObject.query(SQL2, new Object[] {kid.getGroupID()}, new KidMapper());
 			
 			return kids;
@@ -77,6 +77,27 @@ public class KidJDBCTemplate implements KidDAO {
 				+ 		" ORDER BY KID.KidID";
 		
 	    List <Kid> kids = jdbcTemplateObject.query(SQL, new CompleteKidMapper());
+	    
+	   
+	    return kids;
+	}
+	
+	public List<Kid> getKidsParent(String parentID) {
+		// TODO Auto-generated method stub
+		logger.info("calling getKidsParent() now ");
+		
+		String SQL = "select KID.KidName, KID.KidID,  "
+				+ 		"GROUPOFKIDS.GroupID, GROUPOFKIDS.GroupName, "
+				+ 		"PACKAGE.PackageName, PACKAGE.PackageID, PARENT.ParentID, PARENT.ParentName  "
+				+ 		"from KID, GROUPOFKIDS, PACKAGE, PARENT"
+				+ 		" where KID.groupOfkids_groupID= GROUPOFKIDS.GroupID "
+				+ 		" AND KID.package_packageID = PACKAGE.PackageID "
+				+ 		" AND PARENT.ParentID = ? "
+				+ 		" AND KID.ParentID = PARENT.ParentID	" 
+				
+				+ 		" ORDER BY KID.KidID";
+		
+	    List <Kid> kids = jdbcTemplateObject.query(SQL, new Object[] {parentID} ,new CompleteKidMapper());
 	    
 	   
 	    return kids;
@@ -107,6 +128,17 @@ public class KidJDBCTemplate implements KidDAO {
 		
 		return Integer.toString(result);
 		
+	}
+
+	public List<Kid> getKidsList() {
+		// TODO Auto-generated method stub
+		logger.info("calling getKidsList() now ");
+		
+		String SQL = "SELECT * FROM KID";
+		
+	    List <Kid> kidsList = jdbcTemplateObject.query(SQL, new KidMapper());
+		
+		return kidsList;
 	}
 	
 	

@@ -15,11 +15,18 @@ var coachApp = angular.module('coachApp', ['ui.router'])
         controller:     'manageStudents'
     }
     
-    var attendance = {
-        name:   'attendance',
-        url:    '/attendance',
-        templateUrl:    'attendance.html',
-        controller:     'attendance'
+    var viewAttendance = {
+        name:   'viewAttendance',
+        url:    '/viewAttendance',
+        templateUrl:    'viewAttendance.html',
+        controller:     'viewAttendance'
+    }
+    
+    var manageFees = {
+        name:   'manageFees',
+        url:    '/manageFees',
+        templateUrl:    'manageFees.html',
+        controller:     'manageFees'
     }
 
     var login = {
@@ -119,8 +126,9 @@ var coachApp = angular.module('coachApp', ['ui.router'])
     $stateProvider.state(login);
     $stateProvider.state(editKids);
     $stateProvider.state(home);
-    $stateProvider.state(attendance);
+    $stateProvider.state(viewAttendance);
     $stateProvider.state(manageStudents);
+    $stateProvider.state(manageFees);
     $stateProvider.state(getCalendar);
     $stateProvider.state(getKidsInGroup); 
     $stateProvider.state(manageClasses); 
