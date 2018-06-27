@@ -356,7 +356,7 @@ public class CoachAppApplication {
 	
 	@CrossOrigin(origins="*")
 	@RequestMapping("/getKids")
-	public @ResponseBody Map<String,Object> getKids() {
+	public @ResponseBody Map<String,Object> getKids(@RequestBody Coach coach) {
 		//String name;
 	    Map<String,Object> model = new HashMap<String,Object>();
 	    
@@ -374,7 +374,7 @@ public class CoachAppApplication {
 		         context.getBean(KidJDBCTemplate.class);
 		
 	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
-		List<Kid> kid = kidJDBCTemplate.getKidsList();
+		List<Kid> kid = kidJDBCTemplate.getKidsList(coach);
 	    
 	    model.put("kidList", kid);
 	    
@@ -618,7 +618,7 @@ public class CoachAppApplication {
 	  }
 	
 	@RequestMapping("/getKidInfo")
-	public @ResponseBody Map<String,Object> getKidInfo(@RequestBody Kid data) {
+	public @ResponseBody Map<String,Object> getKidInfo(@RequestBody Coach data) {
 		//String name;
 	    Map<String,Object> model = new HashMap<String,Object>();
 	  

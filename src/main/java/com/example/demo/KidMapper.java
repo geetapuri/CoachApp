@@ -23,6 +23,7 @@ public class KidMapper implements RowMapper {
 		//kid.setGroupName(rs.getString("groupName"));
 		kid.setPackageID(rs.getString("Package_packageID"));
 		//kid.setPackageName(rs.getString("packageName"));
+		kid.setCoachID(rs.getString("CoachID"));
 		
 		logger.info("received kidName as  "+ kid.getKidName());
 		logger.info("received kidID as  "+ kid.getKidID());
