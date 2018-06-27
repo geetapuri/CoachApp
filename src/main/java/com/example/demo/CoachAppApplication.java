@@ -544,6 +544,31 @@ public class CoachAppApplication {
 	    
 	  }
 	
+	@RequestMapping("/getCoachID")
+	public @ResponseBody Map<String,Object> getCoachID(@RequestBody Coach data) {
+		//String name;
+	    Map<String,Object> model = new HashMap<String,Object>();
+	  
+	  logger.info("coachID  to be searched for coach =  " + data.getCoachName());
+	 // System.out.println("parentID **** *please* print");
+	  
+	  FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	    CoachJDBCTemplate  coachJDBCTemplate = 
+		         context.getBean(CoachJDBCTemplate.class);
+		
+	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
+		List<Coach> coach = coachJDBCTemplate.getCoachID( data);
+	    
+	    model.put("coach", coach);
+	    //model.put("content", "Hello World");
+	    
+	    context.close();
+	    return model;
+	    
+	  }
+	
 	@RequestMapping("/getGroups")
 	public @ResponseBody Map<String,Object> getGroups(@RequestBody GroupOfKids data) {
 		//String name;

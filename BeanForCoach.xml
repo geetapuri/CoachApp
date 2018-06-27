@@ -30,9 +30,15 @@
       <property name="dataSource" ref="dataSource" />    
    </bean>
    
-   <!-- Definition for parentDBCTemplate bean -->
+   <!-- Definition for parentJDBCTemplate bean -->
    <bean id = "parentJDBCTemplate" 
       class = "com.example.demo.ParentJDBCTemplate" >
+      <property name="dataSource" ref="dataSource" />    
+   </bean>
+   
+   <!-- Definition for coachJDBCTemplate bean -->
+   <bean id = "coachJDBCTemplate" 
+      class = "com.example.demo.CoachJDBCTemplate" >
       <property name="dataSource" ref="dataSource" />    
    </bean>
    
