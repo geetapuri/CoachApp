@@ -271,14 +271,14 @@ public class CoachAppApplication {
 	  }
 	
 	@RequestMapping("/getCalendarAll")
-	public @ResponseBody Map<String,Object> getCalendarAll(@RequestBody Schedule data) {
+	public @ResponseBody Map<String,Object> getCalendarAll(@RequestBody Coach data) {
 		//String name;
 	    Map<String,Object> model = new HashMap<String,Object>();
 	    
 	    
 	    
-	    Date date = data.getDate();
-	   logger.info("First use of logger! date = "+ date);
+	   // Date date = data.getDate();
+	   //logger.info("First use of logger! date = "+ date);
 		
 		//System.out.println("Date is "+ date);
 	    //ToDO 
@@ -289,7 +289,7 @@ public class CoachAppApplication {
 	    CalendarJDBCTemplate  calendarJDBCTemplate = 
 		         context.getBean(CalendarJDBCTemplate.class);
 		
-	   List<Schedule> schedule = calendarJDBCTemplate.getSchedule();
+	   List<Schedule> schedule = calendarJDBCTemplate.getSchedule(data);
 	    
 	    model.put("Schedule", schedule);
 	    

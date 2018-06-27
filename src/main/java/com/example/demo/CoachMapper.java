@@ -18,7 +18,7 @@ public class CoachMapper implements RowMapper{
 		Coach coach = new Coach();
 		coach.setCoachName(rs.getString("coachName"));
 		coach.setCoachID(rs.getString("coachID"));
-		coach.setGroupID(rs.getString("groupID"));
+		
 		
 		
 		

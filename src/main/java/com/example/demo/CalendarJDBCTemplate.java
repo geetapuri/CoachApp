@@ -47,18 +47,23 @@ public List<Schedule> getSchedule(Date date) {
 }
 
 @Override
-public List<Schedule> getSchedule() {
+public List<Schedule> getSchedule(Coach coach) {
 	// TODO Auto-generated method stub - query for finding the schedule based on date
 	logger.info("Calling getSchedule()  ");
-	
+	logger.info("calling schedule for coachID = " + coach.getCoachID());
+	String coachID  = coach.getCoachID();
+
+
 	
 	String SQL = "select C.CalendarID, C.Date, C.Time, " + 
-			"		G.GroupID, G.GroupName	" + 
-			"from CALENDAR C, GROUPOFKIDS G " + 
-			"where C.GroupOFKIDS_GroupID = G.GroupID" +
-			" ORDER BY C.Date DESC";
+			"		G.GroupID, G.GroupName, G.CoachID, Co.CoachName " + 
+			"from CALENDAR C, GROUPOFKIDS G, COACH Co " + 
+			"where C.GroupOFKIDS_GroupID = G.GroupID " +
+			" AND G.CoachID =?" +
+			 " AND G.CoachID = Co.CoachID" +
+			" ORDER BY G.GroupID ASC, C.Date DESC";
 	
-    List <Schedule> schedule = jdbcTemplateObject.query(SQL,new CalendarMapper());
+    List <Schedule> schedule = jdbcTemplateObject.query(SQL,new Object[] {coachID},new CalendarMapper());
     
    
     return schedule;

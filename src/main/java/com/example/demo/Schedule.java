@@ -10,7 +10,14 @@ public class Schedule {
 	private String groupID;
 	private String calendarID;
 	private String kidID;
+	private String coachID;
 	
+	public String getCoachID() {
+		return coachID;
+	}
+	public void setCoachID(String coachID) {
+		this.coachID = coachID;
+	}
 	public String getCalendarID() {
 		return calendarID;
 	}

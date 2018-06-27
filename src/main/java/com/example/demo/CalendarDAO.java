@@ -11,7 +11,7 @@ public interface CalendarDAO {
 	
 	public List<Schedule> getSchedule(Date date);
 	
-	public List<Schedule> getSchedule();
+	public List<Schedule> getSchedule(Coach coach);
 	
 	public List<Schedule> getSchedule(Schedule schedule);
 	
