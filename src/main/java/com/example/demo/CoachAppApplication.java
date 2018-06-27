@@ -570,10 +570,10 @@ public class CoachAppApplication {
 	  }
 	
 	@RequestMapping("/getGroups")
-	public @ResponseBody Map<String,Object> getGroups(@RequestBody GroupOfKids data) {
+	public @ResponseBody Map<String,Object> getGroups(@RequestBody Coach data) {
 		//String name;
 	    Map<String,Object> model = new HashMap<String,Object>();
-	  
+	  String coachID = data.getCoachID();
 	  logger.info("GroupNames to be obtained");
 	  
 	  FileSystemXmlApplicationContext context = 
@@ -583,7 +583,7 @@ public class CoachAppApplication {
 		         context.getBean(GroupJDBCTemplate.class);
 		
 	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
-		List<GroupOfKids> groups = groupJDBCTemplate.getGroups( data);
+		List<GroupOfKids> groups = groupJDBCTemplate.getGroups( coachID);
 	    
 	    model.put("groupList", groups);
 	    //model.put("content", "Hello World");
@@ -618,7 +618,7 @@ public class CoachAppApplication {
 	  }
 	
 	@RequestMapping("/getKidInfo")
-	public @ResponseBody Map<String,Object> getKidInfo(@RequestBody Coach data) {
+	public @ResponseBody Map<String,Object> getKidInfo(@RequestBody Kid data) {
 		//String name;
 	    Map<String,Object> model = new HashMap<String,Object>();
 	  
@@ -663,6 +663,31 @@ public class CoachAppApplication {
 	    
 	    context.close();
 	    return model;
+	    
+	  }
+	
+	@RequestMapping("/getKidInfoCoach")
+	public @ResponseBody Map<String,Object> getKidInfoCoach(@RequestBody Coach data) {
+		//String name;
+	  Map<String,Object> model = new HashMap<String,Object>();
+	  String coachID = data.getCoachID();
+	  
+	  logger.info("Kid List to be obtained");
+	  
+	  FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	  KidJDBCTemplate  kidJDBCTemplate = 
+		         context.getBean(KidJDBCTemplate.class);
+		
+	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
+	  List<Kid> kids = kidJDBCTemplate.getKidsCoach(coachID );
+	    
+	  model.put("kidList", kids);
+	    //model.put("content", "Hello World");
+	    
+	  context.close();
+	  return model;
 	    
 	  }
 	

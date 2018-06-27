@@ -10,6 +10,6 @@ public interface GroupDAO {
 	
 	public List<GroupOfKids> addGroup(GroupOfKids data);
 	
-	public List<GroupOfKids> getGroups(GroupOfKids data);
+	public List<GroupOfKids> getGroups(String coachID);
 
 }

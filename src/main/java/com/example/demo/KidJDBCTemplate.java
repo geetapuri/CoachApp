@@ -102,6 +102,28 @@ public class KidJDBCTemplate implements KidDAO {
 	   
 	    return kids;
 	}
+	
+	public List<Kid> getKidsCoach(String coachID) {
+		// TODO Auto-generated method stub
+		logger.info("calling getKidsCoach() now ");
+		//String coachID = coach.getCoachID();
+		
+		String SQL = "select KID.KidName, KID.KidID,  "
+				+ 		"GROUPOFKIDS.GroupID, GROUPOFKIDS.GroupName, "
+				+ 		"PACKAGE.PackageName, PACKAGE.PackageID, COACH.coachID, COACH.coachName  "
+				+ 		"from KID, GROUPOFKIDS, PACKAGE, COACH"
+				+ 		" where KID.groupOfkids_groupID= GROUPOFKIDS.GroupID "
+				+ 		" AND KID.package_packageID = PACKAGE.PackageID "
+				+ 		" AND COACH.coachID = ? "
+				+ 		" AND GROUPOFKIDS.CoachID = COACH.coachID	" 
+				
+				+ 		" ORDER BY KID.KidID";
+		
+	    List <Kid> kids = jdbcTemplateObject.query(SQL, new Object[] {coachID} ,new CompleteKidMapper());
+	    
+	   
+	    return kids;
+	}
 
 	public String updateKid(Kid data) {
 		// TODO Auto-generated method stub

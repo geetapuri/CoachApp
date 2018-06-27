@@ -49,12 +49,13 @@ private static Logger logger = LogManager.getLogger(GroupJDBCTemplate.class);
 
 
 	@Override
-	public List<GroupOfKids> getGroups(GroupOfKids data) {
+	public List<GroupOfKids> getGroups(String coachID) {
 		// TODO Auto-generated method stub
 		
-		String SQL = "SELECT * FROM GROUPOFKIDS";
+		String SQL = "SELECT * FROM GROUPOFKIDS WHERE "
+				+ " CoachID = ?";
 		
-		List<GroupOfKids> groupList = jdbcTemplateObject.query(SQL, new GroupMapper());
+		List<GroupOfKids> groupList = jdbcTemplateObject.query(SQL, new Object[] {coachID}, new GroupMapper());
 		
 		return groupList;
 		

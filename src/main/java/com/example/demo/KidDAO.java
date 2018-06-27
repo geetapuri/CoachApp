@@ -15,4 +15,6 @@ public interface KidDAO {
 	public List<Kid> getKids();
 	
 	public List<Kid> getKidsParent(String parentID);
+	
+	public List<Kid> getKidsCoach(String coachID);
 }
