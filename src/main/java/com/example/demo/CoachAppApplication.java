@@ -18,7 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+//import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -60,7 +63,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 @RestController
 @Controller
 public class CoachAppApplication {
-	private static final Logger logger = Logger.getLogger(CoachAppApplication.class);
+	private static final Logger logger = Logger.getLogger(CoachAppApplication.class.getName());
+	
+	//private static final Logger logger = Logger.getLogger(CoachAppApplication.class);
 	
 	
 	@Configuration
@@ -77,8 +82,12 @@ public class CoachAppApplication {
 		
 		@Override
 	    protected void configure(HttpSecurity http) throws Exception {
+		logger.setLevel(Level.ALL);
 	    logger.info("Inside configure http security");
-	    	http
+	    logger.warning("protected void configure- testing warning");
+	    logger.severe("protected void ****configure - testing severe ");
+
+	    http
 	    	
 	    		.cors()
 	    		.and()
@@ -181,6 +190,7 @@ public class CoachAppApplication {
 		@CrossOrigin(origins= "*")
 		@RequestMapping("/resourceLogin")
 		public @ResponseBody Map<String,Object> user( Principal user) {
+			System.out.println("in resource login");
 			Map<String,Object> model = new HashMap<String,Object>();
 			   logger.info("First use of logger! user = "+ user.getName());
 			   model.put("user", user);
@@ -196,7 +206,7 @@ public class CoachAppApplication {
 	    Map<String,Object> model = new HashMap<String,Object>();
 	    model.put("id", UUID.randomUUID().toString());
 	    model.put("content", "Hello World");
-	    logger.debug("Got the request mapped!");
+	    logger.info("Got the request mapped!");
 	    logger.info("Got the request mapped! INFO");
 	    return model;
 	  }
@@ -352,6 +362,7 @@ public class CoachAppApplication {
 	    
 	    
 	   logger.info("First use of logger! in getKids");
+	   System.out.println("in get kids");
 		
 		
 	    //ToDO 
@@ -514,6 +525,7 @@ public class CoachAppApplication {
 	    Map<String,Object> model = new HashMap<String,Object>();
 	  
 	  logger.info("ParentID  to be searched for parent =  " + data.getParentName());
+	  System.out.println("parentID **** *please* print");
 	  
 	  FileSystemXmlApplicationContext context = 
 				new FileSystemXmlApplicationContext("BeanForCoach.xml");

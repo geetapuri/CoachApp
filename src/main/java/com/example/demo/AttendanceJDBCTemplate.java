@@ -65,7 +65,7 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				ps.setString(4, kids.get(i).getPresent());
 				//ps.setInt(5, i+11);
 				
-				logger.info("kid ID  = "+ kids.get(i).getKidID());
+				logger.info("kid ID is= "+ kids.get(i).getKidID());
 				logger.info("kid present is = "+ kids.get(i).getPresent());
 				
 			}
@@ -95,7 +95,7 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				ps.setString(5, "1");
 				//ps.setInt(5, i+11);
 				
-				logger.info("kid ID = "+ kids.get(i).getKidID());
+				logger.info("kid ID is  = "+ kids.get(i).getKidID());
 				logger.info("kid present = "+ kids.get(i).getPresent());
 				
 			}
