@@ -78,7 +78,7 @@ public List<Schedule> getSchedule(Schedule schedule) {
 	String kidID = schedule.getKidID();
 	
 	String SQL = "select C.CalendarID, C.Date, C.Time, " + 
-			"		G.GroupID, G.GroupName, K.KidID	" + 
+			"		G.GroupID, G.GroupName, G.CoachID, K.KidID	" + 
 			"from CALENDAR C, GROUPOFKIDS G , KID K " + 
 			"where C.GroupOFKIDS_GroupID = G.GroupID " + 
 			" And K.GroupOfKids_GroupID = G.GroupID " + 
