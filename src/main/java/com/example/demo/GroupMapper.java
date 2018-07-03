@@ -21,6 +21,7 @@ public class GroupMapper implements RowMapper {
 		GroupOfKids groupList = new GroupOfKids();
 		groupList.setGroupName(rs.getString("GroupName"));
 		groupList.setGroupID(rs.getString("GroupID"));
+		groupList.setCoachID(rs.getString("CoachID"));
 		
 		logger.info("group name = "+ groupList.getGroupName());
 		return groupList;

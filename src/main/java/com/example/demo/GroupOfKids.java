@@ -8,6 +8,7 @@ public class GroupOfKids {
 	
 	private String groupName;
 	private String groupID;
+	private String coachID;
 	
 	public String getGroupName() {
 		return groupName;
@@ -20,6 +21,12 @@ public class GroupOfKids {
 	}
 	public void setGroupID(String groupID) {
 		this.groupID = groupID;
+	}
+	public String getCoachID() {
+		return coachID;
+	}
+	public void setCoachID(String coachID) {
+		this.coachID = coachID;
 	}
 
 }

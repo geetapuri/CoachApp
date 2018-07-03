@@ -28,10 +28,12 @@ public class KidJDBCTemplate implements KidDAO {
 		// TODO Auto-generated method stub
 		logger.info("calling getKids(groupID) now for groupID = "+ groupID);
 		
-		String SQL = "select KID.KidName, KID.KidID, KID.GROUPOFKIDS_GroupID, KID.PACKAGE_PACKAGEID  "
-				+ " from KID"
+		String SQL = "select KID.KidName, KID.KidID, KID.GROUPOFKIDS_GroupID, KID.PACKAGE_PACKAGEID, "
+				+ " GROUPOFKIDS.CoachID "
+				+ " from KID, GROUPOFKIDS"
 				+ " where "
-				+ " KID.GROUPOFKIDS_GROUPID = ?  ";
+				+ " KID.GROUPOFKIDS_GROUPID = ? "
+				+ " AND KID.GROUPOFKIDS_GROUPID = GROUPOFKIDS.GroupID ";
 		
 	    List <Kid> kid = jdbcTemplateObject.query(SQL, new Object[] {groupID}, new KidMapper());
 	    
@@ -45,16 +47,25 @@ public class KidJDBCTemplate implements KidDAO {
 
 	@Override
 	public List<Kid> addKid(Kid kid) {
-		String SQL = "INSERT INTO KID (GROUPOFKIDS_GROUPID, PACKAGE_PACKAGEID, KIDNAME) VALUES (?,?,?)";
+		
+		//get parent ID from parentName
+		logger.info("parent name received as " + kid.getParentName());
+		
+		String SQL1 = "SELECT * from PARENT WHERE ParentName =?";
+		List<Parent> parent = jdbcTemplateObject.query(SQL1, new Object[] {kid.getParentName()}, new ParentMapper());
+		
+		String SQL = "INSERT INTO KID (GROUPOFKIDS_GROUPID, PACKAGE_PACKAGEID, KidName, ParentID) VALUES (?,?,?,?)";
 		logger.info("inserting groupname as : " + kid.getGroupID());
 		
-		int resultOfQuery = jdbcTemplateObject.update( SQL, kid.getGroupID(), kid.getPackageID(), kid.getKidName() );
+		String parentID = parent.get(0).getParentID(); 
+		int resultOfQuery = jdbcTemplateObject.update( SQL, kid.getGroupID(), kid.getPackageID(), kid.getKidName(), parentID );
 		
 		logger.info("result of query = "+ resultOfQuery);
 		
 		if (resultOfQuery!=0) {
 			
-			String SQL2 = "Select * from KID where GROUPOFKIDS_GROUPID = ? ";
+			String SQL2 = "Select * from KID, GROUPOFKIDS where KID.GROUPOFKIDS_GROUPID = ? "
+					+ " AND KID.GROUPOFKIDS_GROUPID = GROUPOFKIDS.GroupID";
 			List<Kid> kids =  jdbcTemplateObject.query(SQL2, new Object[] {kid.getGroupID()}, new KidMapper());
 			
 			return kids;

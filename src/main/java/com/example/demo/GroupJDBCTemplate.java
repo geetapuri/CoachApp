@@ -29,10 +29,10 @@ private static Logger logger = LogManager.getLogger(GroupJDBCTemplate.class);
 		
 		List <GroupOfKids> result = null;
 		
-		String SQL = "INSERT INTO GROUPOFKIDS (GROUPNAME) VALUES (?)";
+		String SQL = "INSERT INTO GROUPOFKIDS (GROUPNAME, CoachID) VALUES (?,?)";
 		logger.info("inserting groupname as : " + data.getGroupName());
 		
-		int resultOfQuery = jdbcTemplateObject.update( SQL, data.getGroupName() );
+		int resultOfQuery = jdbcTemplateObject.update( SQL, data.getGroupName(), data.getCoachID() );
 		
 		logger.info("result of query after insert into groupofkids = "+ resultOfQuery);
 		

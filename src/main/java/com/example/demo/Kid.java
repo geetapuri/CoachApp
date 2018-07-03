@@ -10,6 +10,7 @@ public class Kid {
 		private String groupName;
 		private String parentID;
 		private String coachID;
+		private String parentName;
 		
 		public String getCoachID() {
 			return coachID;
@@ -66,6 +67,12 @@ public class Kid {
 		}
 		public void setKidID(String kidID) {
 			this.kidID = kidID;
+		}
+		public String getParentName() {
+			return parentName;
+		}
+		public void setParentName(String parentName) {
+			this.parentName = parentName;
 		}
 	
 }
