@@ -298,6 +298,34 @@ public class CoachAppApplication {
 	    
 	  }
 	
+	@RequestMapping("/getCalendarKidDate")
+	public @ResponseBody Map<String,Object> getCalendarKidDate(@RequestBody Schedule schedule) {
+		//String name;
+	    Map<String,Object> model = new HashMap<String,Object>();
+	    
+	    
+	    
+	   // Date date = data.getDate();
+	   //logger.info("First use of logger! date = "+ date);
+		
+		//System.out.println("Date is "+ date);
+	    //ToDO 
+	    // get the date and do a search in db based on date
+	    FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	    CalendarJDBCTemplate  calendarJDBCTemplate = 
+		         context.getBean(CalendarJDBCTemplate.class);
+		
+	   List<Schedule> returnSchedule = calendarJDBCTemplate.getScheduleKidDate(schedule);
+	    
+	    model.put("returnSchedule", returnSchedule);
+	    
+	    context.close();
+	    return model;
+	    
+	  }
+	
 	@RequestMapping("/getCalendarAllKid")
 	public @ResponseBody Map<String,Object> getCalendarAllParent(@RequestBody Schedule data) {
 		//String name;

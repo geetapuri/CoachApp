@@ -22,6 +22,7 @@ public class CalendarMapper implements RowMapper<Schedule>{
 		schedule.setGroupID(rs.getString("GroupID"));
 		schedule.setCalendarID(rs.getString("CalendarID"));
 		schedule.setCoachID(rs.getString("CoachID"));
+		schedule.setKidID(rs.getString("KidID"));
 		
 		
 		return schedule;

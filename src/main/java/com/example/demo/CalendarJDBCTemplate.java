@@ -157,6 +157,28 @@ public String updateSchedule(Schedule schedule) {
 		else return "CANT UPDATE SCHEDULE";
 }
 
+public List<Schedule> getScheduleKidDate(Schedule schedule) {
+	
+logger.info("Calling getScheduleKidDate()  ");
+	
+	String kidID = schedule.getKidID();
+	//Date date = schedule.getDate();
+	
+	String SQL = "select C.CalendarID, C.Date, C.Time, " + 
+			"		G.GroupID, G.GroupName, G.CoachID, K.KidID	" + 
+			"from CALENDAR C, GROUPOFKIDS G , KID K " + 
+			"where C.GROUPOFKIDS_GroupID = G.GroupID " + 
+			" And K.GROUPOFKIDS_GroupID = G.GroupID " + 
+			"	And K.KidID = ? And DATE(C.Date) = ?" +
+			" ORDER BY C.Date DESC";
+	
+    List <Schedule> returnSchedule = jdbcTemplateObject.query(SQL,new Object[] {kidID, schedule.getDate()}, new CalendarMapper());
+    
+   
+    return returnSchedule;
+	
+}
+
 
 	
 }
