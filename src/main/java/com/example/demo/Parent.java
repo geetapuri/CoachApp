@@ -4,6 +4,8 @@ public class Parent {
 	
 	private String parentName;
 	private String parentID;
+	private String parentAvatar;
+	
 	public String getParentName() {
 		return parentName;
 	}
@@ -15,6 +17,12 @@ public class Parent {
 	}
 	public void setParentID(String parentID) {
 		this.parentID = parentID;
+	}
+	public String getParentAvatar() {
+		return parentAvatar;
+	}
+	public void setParentAvatar(String parentAvatar) {
+		this.parentAvatar = parentAvatar;
 	}
 	
 	

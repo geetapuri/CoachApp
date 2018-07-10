@@ -11,6 +11,7 @@ public class Kid {
 		private String parentID;
 		private String coachID;
 		private String parentName;
+		private String avatarSrc;
 		
 		public String getCoachID() {
 			return coachID;
@@ -73,6 +74,12 @@ public class Kid {
 		}
 		public void setParentName(String parentName) {
 			this.parentName = parentName;
+		}
+		public String getAvatarSrc() {
+			return avatarSrc;
+		}
+		public void setAvatarSrc(String avatarSrc) {
+			this.avatarSrc = avatarSrc;
 		}
 	
 }

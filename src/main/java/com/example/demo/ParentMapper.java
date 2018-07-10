@@ -19,6 +19,7 @@ public class ParentMapper implements RowMapper {
 		Parent parent = new Parent();
 		parent.setParentName(rs.getString("ParentName"));
 		parent.setParentID(rs.getString("ParentID"));
+		parent.setParentAvatar(rs.getString("AVATAR"));
 		
 		
 		logger.info("received parentName as  "+ parent.getParentName());
