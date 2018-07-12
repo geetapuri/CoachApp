@@ -10,6 +10,7 @@ public class CoachAppData {
 	private Date date;
 	private String present;
 	private String groupName;
+	
 	public String getGroupID() {
 		return groupID;
 	}

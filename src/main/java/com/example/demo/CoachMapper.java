@@ -21,7 +21,6 @@ public class CoachMapper implements RowMapper{
 		
 		
 		
-		
 		return coach;
 	}
 
