@@ -180,18 +180,33 @@ public class CalendarJDBCTemplate implements CalendarDAO{
 	
 	public List<Schedule> getScheduleCoachDate(Schedule schedule) {
 	logger.info("Calling getScheduleKidDate()  ");
-		
+		//TODO if groupID has come, sql based on that, else this one
 		String coachID = schedule.getCoachID();
+		String SQL;
+		List <Schedule> returnSchedule;
 		//Date date = schedule.getDate();
+		if (schedule.getGroupID()!= null ) { 
+			 SQL = "select 'AllKids' as KidID, C.CalendarID, C.Date, C.Time, " + 
+					"G.GroupID, G.GroupName, G.CoachID	" + 
+					"from CALENDAR C, GROUPOFKIDS G  " + 
+					"where C.GROUPOFKIDS_GroupID = G.GroupID " + 
+					"And G.CoachID = ? And DATE(C.Date) = ? " +
+					" And G.GroupID = ? " +
+					" ORDER BY C.Date DESC";
+			  returnSchedule = jdbcTemplateObject.query(SQL,new Object[] {coachID, schedule.getDate(), schedule.getGroupID()}, new CalendarMapper());
+			    
+			
+		} else {
 		
-		String SQL = "select 'AllKids' as KidID, C.CalendarID, C.Date, C.Time, " + 
+		 SQL = "select 'AllKids' as KidID, C.CalendarID, C.Date, C.Time, " + 
 				"G.GroupID, G.GroupName, G.CoachID	" + 
 				"from CALENDAR C, GROUPOFKIDS G  " + 
 				"where C.GROUPOFKIDS_GroupID = G.GroupID " + 
 				"And G.CoachID = ? And DATE(C.Date) = ?" +
 				" ORDER BY C.Date DESC";
-		
-	    List <Schedule> returnSchedule = jdbcTemplateObject.query(SQL,new Object[] {coachID, schedule.getDate()}, new CalendarMapper());
+		  returnSchedule = jdbcTemplateObject.query(SQL,new Object[] {coachID, schedule.getDate()}, new CalendarMapper());
+		    
+		}
 	    
 	   
 	    return returnSchedule;
