@@ -119,16 +119,15 @@ public class KidJDBCTemplate implements KidDAO {
 		logger.info("calling getKidsCoach() now ");
 		//String coachID = coach.getCoachID();
 		
-		String SQL = "select KID.KidName, KID.KidID,  "
+		String SQL = "select KID.KidName, KID.KidID, KID.AVATAR,  "
 				+ 		"GROUPOFKIDS.GroupID, GROUPOFKIDS.GroupName, "
 				+ 		"PACKAGE.PackageName, PACKAGE.PackageID, COACH.coachID, COACH.coachName  "
 				+ 		"from KID, GROUPOFKIDS, PACKAGE, COACH"
 				+ 		" where KID.groupOfkids_groupID= GROUPOFKIDS.GroupID "
 				+ 		" AND KID.package_packageID = PACKAGE.PackageID "
 				+ 		" AND COACH.coachID = ? "
-				+ 		" AND GROUPOFKIDS.CoachID = COACH.coachID	" 
-				
-				+ 		" ORDER BY KID.KidID";
+				+ 		" AND GROUPOFKIDS.CoachID = COACH.coachID	" 				
+				+ 		" ORDER BY GROUPOFKIDS.GroupID, KidName";
 		
 	    List <Kid> kids = jdbcTemplateObject.query(SQL, new Object[] {coachID} ,new CompleteKidMapper());
 	    

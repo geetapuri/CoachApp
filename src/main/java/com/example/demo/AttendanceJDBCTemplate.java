@@ -35,16 +35,16 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 	String result;
 
 	@Override
-	public String markAttendance(MarkAttendance data) {
+	public String markAttendance(List<Attendance> data) {
 		// TODO Auto-generated method stub
 		//execute insert for list of kids and return success / failure
 		
 		
 		
-		List<Kid> kids = data.getKidsList();
-		logger.info("size of kids object  : " + kids.size());
-		logger.info("details of data received: "+ data.getGroupID()
-		+ data.getDate() + data.getKidsList());
+		//List<Kid> kids = data.getKidsList();
+		//logger.info("size of kids object  : " + kids.size());
+		//logger.info("details of data received: "+ data.getGroupID()
+		//+ data.getDate() );
 		
 	
 		
@@ -59,20 +59,19 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				// TODO Auto-generated method stub
 				
 				//((List<Integer>) data).get(i);
-				ps.setDate(1, data.getDate());
-				ps.setString(2, data.getGroupID());
-				ps.setString(3,  kids.get(i).getKidID());
-				ps.setString(4, kids.get(i).getPresent());
+				ps.setDate(1, data.get(i).getDate());
+				ps.setString(2, data.get(i).getGroupID());
+				ps.setString(3,  data.get(i).getKidID());
+				ps.setString(4, data.get(i).getPresentAbsent());
 				//ps.setInt(5, i+11);
 				
-				logger.info("kid ID is= "+ kids.get(i).getKidID());
-				logger.info("kid present is = "+ kids.get(i).getPresent());
+				
 				
 			}
 			@Override
 			public int getBatchSize() {
 				// TODO Auto-generated method stub
-				return kids.size();
+				return data.size();
 			}
 			
 		});
@@ -88,21 +87,19 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				// TODO Auto-generated method stub
 				
 				//((List<Integer>) data).get(i);
-				ps.setDate(1, data.getDate());
-				ps.setString(2, kids.get(i).getPresent());
+				ps.setDate(1, data.get(i).getDate());
+				ps.setString(2, data.get(i).getPresentAbsent());
 				ps.setString(3, "N");
-				ps.setString(4,  kids.get(i).getKidID());
+				ps.setString(4,  data.get(i).getKidID());
 				ps.setString(5, "1");
 				//ps.setInt(5, i+11);
 				
-				logger.info("kid ID is  = "+ kids.get(i).getKidID());
-				logger.info("kid present = "+ kids.get(i).getPresent());
 				
 			}
 			@Override
 			public int getBatchSize() {
 				// TODO Auto-generated method stub
-				return kids.size();
+				return data.size();
 			}
 			
 				
@@ -139,6 +136,23 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 		
 	    List <Attendance> attendance = jdbcTemplateObject.query(SQL,new Object[] 
 	    		{data.getKidID() },new AttendanceMapper());
+	    
+	   
+		return attendance;
+	}
+
+
+
+	public List<Attendance> viewAttendanceGroupDate(Attendance data) {
+		String SQL = " SELECT A.*, K.KIDNAME "
+				+ " FROM ATTENDANCE A, KID K "
+				+ " WHERE A.GROUPOFKIDS_GROUPID= ?"
+				+ " AND DATE(A.DateOfAttendance) = ? "
+				+ " AND A.KID_KIDID=K.KIDID "
+				+ " ORDER BY  A.DateOfAttendance DESC";  
+		
+	    List <Attendance> attendance = jdbcTemplateObject.query(SQL,new Object[] 
+	    		{data.getGroupID(), data.getDate() },new AttendanceMapper());
 	    
 	   
 		return attendance;

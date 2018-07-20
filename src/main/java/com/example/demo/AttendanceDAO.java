@@ -10,7 +10,7 @@ public interface AttendanceDAO {
 	
 	public void setDataSource(DataSource ds);
 	
-	public String markAttendance(MarkAttendance data);
+	public String markAttendance(List<Attendance> data);
 	
 	public List<Attendance> checkAttendance(Attendance data);
 }

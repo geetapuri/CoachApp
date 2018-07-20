@@ -58,6 +58,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @SpringBootApplication()
 @RestController
@@ -326,6 +329,34 @@ public class CoachAppApplication {
 	    
 	  }
 	
+	@RequestMapping("/getCalendarCoachGroup")
+	public @ResponseBody Map<String,Object> getCalendarCoachGroup(@RequestBody Schedule data) {
+		//String name;
+	    Map<String,Object> model = new HashMap<String,Object>();
+	    
+	    
+	    
+	   // Date date = data.getDate();
+	   //logger.info("First use of logger! date = "+ date);
+		
+		//System.out.println("Date is "+ date);
+	    //ToDO 
+	    // get the date and do a search in db based on date
+	    FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	    CalendarJDBCTemplate  calendarJDBCTemplate = 
+		         context.getBean(CalendarJDBCTemplate.class);
+		
+	   List<Schedule> schedule = calendarJDBCTemplate.getScheduleCoachGroup(data);
+	    
+	    model.put("Schedule", schedule);
+	    
+	    context.close();
+	    return model;
+	    
+	  }
+	
 	@RequestMapping("/getCalendarKidDate")
 	public @ResponseBody Map<String,Object> getCalendarKidDate(@RequestBody Schedule schedule) {
 		//String name;
@@ -440,9 +471,11 @@ public class CoachAppApplication {
 	  }
 	
 	@RequestMapping("/markAttendance")
-	public @ResponseBody Map<String,Object> markAttendance(@RequestBody MarkAttendance data) {
+	public @ResponseBody Map<String,Object> markAttendance(@RequestBody MarkAttendance attendanceList) {
 		//String name;
-	    Map<String,Object> model = new HashMap<String,Object>();
+	   Map<String,Object> model = new HashMap<String,Object>();
+	    
+	   List<Attendance> data = attendanceList.getAttendanceList();  
 	  
 	  logger.info("Landed mark attendance  ");
 	  
@@ -495,6 +528,34 @@ public class CoachAppApplication {
 	    
 	  }
 	
+	@RequestMapping("/viewAttendanceForGroupDate")
+	public @ResponseBody Map<String,Object> viewAttendanceForGroupDate(@RequestBody Attendance data) {
+		//String name;
+	    Map<String,Object> model = new HashMap<String,Object>();
+	  
+	  logger.info("Landed view attendance  ");
+	  
+	  FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	    AttendanceJDBCTemplate  attendanceJDBCTemplate = 
+		         context.getBean(AttendanceJDBCTemplate.class);
+	    
+	    //TODO : check if attendance is already marked for the date. 
+	    // If marked, show marked attendance else go to mark attendance
+	    
+		
+	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
+	    List<Attendance> attendance = attendanceJDBCTemplate.viewAttendanceGroupDate( data);
+	    
+	    model.put("attendance", attendance);
+	    //model.put("content", "Hello World");
+	    
+	    context.close();
+	    return model;
+	    
+	  }
+	
 	@RequestMapping("/viewFees")
 	public @ResponseBody Map<String,Object> viewFees(@RequestBody FeeMgmt data) {
 		//String name;
@@ -524,11 +585,13 @@ public class CoachAppApplication {
 	  }
 	
 	@RequestMapping("/payFees")
-	public @ResponseBody Map<String,Object> payFees(@RequestBody FeeMgmt data) {
+	public @ResponseBody Map<String,Object> payFees(@RequestBody PayFee feeList) {
 		//String name;
 	    Map<String,Object> model = new HashMap<String,Object>();
 	  
 	  logger.info("Landed pay fees  ");
+	  
+	  List<FeeMgmt> data = feeList.getFeeList() ;
 	  
 	  FileSystemXmlApplicationContext context = 
 				new FileSystemXmlApplicationContext("BeanForCoach.xml");
@@ -537,8 +600,8 @@ public class CoachAppApplication {
 		         context.getBean(FeeMgmtJDBCTemplate.class);
 	    
 	   
-	    logger.info("updating for kid id = " + data.getKidID());
-	    logger.info("updating for date = " + data.getDateOfAttendance());
+	   // logger.info("updating for kid id = " + data.getKidID());
+	    //logger.info("updating for date = " + data.getDateOfAttendance());
 		
 	    
 	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();

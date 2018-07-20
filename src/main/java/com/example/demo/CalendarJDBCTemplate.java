@@ -212,6 +212,25 @@ public class CalendarJDBCTemplate implements CalendarDAO{
 	    return returnSchedule;
 		
 	}
+
+	public List<Schedule> getScheduleCoachGroup(Schedule data) {
+		logger.info("Calling getScheduleKidDate()  ");
+		
+		String groupID = data.getGroupID();
+		//Date date = schedule.getDate();
+		
+		String sql = "select  'AllKids' as KidID, C.CalendarID, C.Date, C.Time, " + 
+				"G.GroupID, G.GroupName, G.CoachID	" + 
+				"from CALENDAR C, GROUPOFKIDS G  " + 
+				"where C.GROUPOFKIDS_GroupID = G.GroupID " + 
+				"And G.GroupID=? And G.CoachID=? " +
+				" ORDER BY C.Date DESC";
+		
+	    List <Schedule> returnSchedule = jdbcTemplateObject.query(sql,new Object[] {groupID, data.getCoachID()}, new CalendarMapper());
+	    
+	   
+	    return returnSchedule;
+	}
 }
 
 

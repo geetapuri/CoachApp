@@ -22,7 +22,7 @@ public class FeeMgmtMapper implements RowMapper {
 		feeList.setDateOfAttendance(rs.getString("DateOfAttendance"));
 		feeList.setPresent(rs.getString("Present"));
 		feeList.setFeePaid(rs.getString("FeePaid"));
-		feeList.setFeeMgmtID(rs.getString("KidID"));
+		feeList.setFeeMgmtID(rs.getString("FeeMgmtID"));
 		feeList.setFeeID(rs.getString("FeeID"));
 		feeList.setKidID(rs.getString("KidID"));
 		
