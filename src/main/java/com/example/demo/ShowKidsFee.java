@@ -1,6 +1,6 @@
 package com.example.demo;
 
-public class FeeMgmt {
+public class ShowKidsFee {
 	private String dateOfAttendance;
 	private String present;
 	private String feePaid;
@@ -8,8 +8,7 @@ public class FeeMgmt {
 	private String feeID;
 	private String feeMgmtID;
 	private String groupID;
-	
-	
+	private String kidName;
 	
 	public String getDateOfAttendance() {
 		return dateOfAttendance;
@@ -53,7 +52,12 @@ public class FeeMgmt {
 	public void setGroupID(String groupID) {
 		this.groupID = groupID;
 	}
-	
+	public String getKidName() {
+		return kidName;
+	}
+	public void setKidName(String kidName) {
+		this.kidName = kidName;
+	}
 	
 
 }

@@ -3,6 +3,9 @@ package com.example.demo;
 import java.io.IOException;
 import java.security.Principal;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,11 +25,13 @@ import java.util.logging.Level;
 //import org.apache.log4j.Logger;
 import java.util.logging.Logger;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -34,6 +39,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -46,6 +53,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,13 +70,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-@SpringBootApplication()
+@SpringBootApplication
+@EnableScheduling
 @RestController
 @Controller
+
+
+
 public class CoachAppApplication {
 	private static final Logger logger = Logger.getLogger(CoachAppApplication.class.getName());
 	
 	//private static final Logger logger = Logger.getLogger(CoachAppApplication.class);
+	
 	
 	
 	@Configuration
@@ -151,6 +164,10 @@ public class CoachAppApplication {
 		        }
 		    }
 		}
+		
+		
+		
+		
 	
 		
 		@Autowired
@@ -187,6 +204,9 @@ public class CoachAppApplication {
 		  repository.setHeaderName("X-XSRF-TOKEN");
 		  return repository;
 		}
+		
+		
+		
 		
 		
 		
@@ -441,6 +461,34 @@ public class CoachAppApplication {
 	    
 	  }
 	
+	@RequestMapping("/getKidsFeeInGroup")
+	public @ResponseBody Map<String,Object> getKidsFeeInGroup(@RequestBody GroupOfKids data) {
+		//String name;
+	    Map<String,Object> model = new HashMap<String,Object>();
+	    
+	    //Date date = data.getDate();
+	    String groupID = data.getGroupID();
+	   logger.info("First use of logger! groupID = "+ groupID);
+		
+		
+	    //ToDO 
+	    // get the groupName from data and get Names of kids in that group 
+	    FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	    KidJDBCTemplate  kidJDBCTemplate = 
+		         context.getBean(KidJDBCTemplate.class);
+		
+	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
+		List<Kid> kid = kidJDBCTemplate.getKidsFee(groupID);
+	    
+	    model.put("kidsList", kid);
+	    
+	    context.close();
+	    return model;
+	    
+	  }
+	
 	@CrossOrigin(origins="*")
 	@RequestMapping("/getKids")
 	public @ResponseBody Map<String,Object> getKids(@RequestBody Coach coach) {
@@ -549,6 +597,34 @@ public class CoachAppApplication {
 	    List<Attendance> attendance = attendanceJDBCTemplate.viewAttendanceGroupDate( data);
 	    
 	    model.put("attendance", attendance);
+	    //model.put("content", "Hello World");
+	    
+	    context.close();
+	    return model;
+	    
+	  }
+	
+	@RequestMapping("/viewFeeForGroupDate")
+	public @ResponseBody Map<String,Object> viewFeesForGroupDate(@RequestBody FeeMgmt data) {
+		//String name;
+	    Map<String,Object> model = new HashMap<String,Object>();
+	  
+	  logger.info("Landed view attendance  ");
+	  
+	  FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	    FeeMgmtJDBCTemplate  feeMgmtJDBCTemplate = 
+		         context.getBean(FeeMgmtJDBCTemplate.class);
+	    
+	    //TODO : check if attendance is already marked for the date. 
+	    // If marked, show marked attendance else go to mark attendance
+	    
+		
+	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
+	    List<FeeMgmt> feeMgmtList = feeMgmtJDBCTemplate.viewFeeForGroupDate( data);
+	    
+	    model.put("feeMgmtList", feeMgmtList);
 	    //model.put("content", "Hello World");
 	    
 	    context.close();

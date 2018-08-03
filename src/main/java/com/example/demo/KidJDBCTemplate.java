@@ -175,6 +175,23 @@ public class KidJDBCTemplate implements KidDAO {
 		
 		return kidsList;
 	}
+
+	public List<Kid> getKidsFee(String groupID) {
+		logger.info("calling getKidsFee(groupID) now for groupID = "+ groupID);
+		
+		String SQL = "select KID.KidName, KID.KidID, KID.GROUPOFKIDS_GroupID, KID.PACKAGE_PACKAGEID, "
+				+ " GROUPOFKIDS.CoachID, INVOICE_HEADER.InvoiceAmount, INVOICE_HEADER.InvoiceDue "
+				+ " from KID, GROUPOFKIDS, INVOICE_HEADER"
+				+ " where "
+				+ " KID.GROUPOFKIDS_GROUPID = ? "
+				+ " AND KID.GROUPOFKIDS_GROUPID = GROUPOFKIDS.GroupID "
+				+ " AND KID.KidID = INVOICE_HEADER.KidID ";
+		
+	    List <Kid> kid = jdbcTemplateObject.query(SQL, new Object[] {groupID}, new KidFeeMapper());
+	    
+	   
+	    return kid;	
+	}
 	
 	
 

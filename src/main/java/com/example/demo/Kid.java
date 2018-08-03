@@ -12,7 +12,15 @@ public class Kid {
 		private String coachID;
 		private String parentName;
 		private String avatarSrc;
+		private String invoiceAmount;
+		private String invoiceDue;
 		
+		public String getInvoiceDue() {
+			return invoiceDue;
+		}
+		public void setInvoiceDue(String invoiceDue) {
+			this.invoiceDue = invoiceDue;
+		}
 		public String getCoachID() {
 			return coachID;
 		}
@@ -80,6 +88,12 @@ public class Kid {
 		}
 		public void setAvatarSrc(String avatarSrc) {
 			this.avatarSrc = avatarSrc;
+		}
+		public String getInvoiceAmount() {
+			return invoiceAmount;
+		}
+		public void setInvoiceAmount(String invoiceAmount) {
+			this.invoiceAmount = invoiceAmount;
 		}
 	
 }

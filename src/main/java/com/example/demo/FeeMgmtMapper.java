@@ -25,6 +25,7 @@ public class FeeMgmtMapper implements RowMapper {
 		feeList.setFeeMgmtID(rs.getString("FeeMgmtID"));
 		feeList.setFeeID(rs.getString("FeeID"));
 		feeList.setKidID(rs.getString("KidID"));
+		feeList.setGroupID(rs.getString("GroupID"));
 		
 		logger.info("kid ID = "+ feeList.getKidID());
 		return feeList;

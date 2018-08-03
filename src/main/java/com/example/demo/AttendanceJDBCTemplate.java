@@ -63,6 +63,13 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				ps.setString(2, data.get(i).getGroupID());
 				ps.setString(3,  data.get(i).getKidID());
 				ps.setString(4, data.get(i).getPresentAbsent());
+				
+				//check if child is present, then increase its present counter in invoice header
+				if (data.get(i).getPresentAbsent().equals("P")) {
+					String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter+1 "
+							+ " 	WHERE KidID = ?";
+					jdbcTemplateObject.update(sql3, data.get(i).getKidID());
+				}
 				//ps.setInt(5, i+11);
 				
 				
@@ -76,8 +83,8 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 			
 		});
 		
-		String SQL2 = "INSERT INTO FEEMGMT (DateOfAttendance, Present, FeePaid, KidID, FeeID)"
-				+ " values(?,?,?,?,?)  "
+		String SQL2 = "INSERT INTO FEEMGMT (DateOfAttendance, Present, FeePaid, KidID, FeeID, GroupID)"
+				+ " values(?,?,?,?,?,?)  "
 				+ " ON DUPLICATE KEY UPDATE "
 				+ " Present = values(Present)";
 		
@@ -92,6 +99,8 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				ps.setString(3, "N");
 				ps.setString(4,  data.get(i).getKidID());
 				ps.setString(5, "1");
+				ps.setString(6, data.get(i).getGroupID());
+	
 				//ps.setInt(5, i+11);
 				
 				
@@ -102,9 +111,9 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				return data.size();
 			}
 			
-				
-			
 		});
+		
+	
 		
 		return result ="Success";
 	}

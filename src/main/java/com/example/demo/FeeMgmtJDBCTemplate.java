@@ -46,6 +46,14 @@ public class FeeMgmtJDBCTemplate implements FeeMgmtDAO{
 				ps.setString(3, data.get(i).getDateOfAttendance());
 				//ps.setInt(5, i+11);
 				
+				//check if fee is paid, then decrease its present counter in invoice header by 4
+				// and set the Invoice Due Counter as N
+				if (data.get(i).getFeePaid().equals("Y")) {
+					String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-4, "
+							+ "  InvoiceDue='N' "
+							+ " 	WHERE KidID = ?";
+					jdbcTemplateObject.update(sql3, data.get(i).getKidID());
+				}
 				
 				
 			}
@@ -73,6 +81,54 @@ public class FeeMgmtJDBCTemplate implements FeeMgmtDAO{
 	    		{data.getKidID() },new FeeMgmtMapper());
 		
 	    return feeList;
+	}
+
+	public void updateInvoice() {
+		logger.info("inside update invoice");
+		
+		String sql = "SELECT * FROM INVOICE_HEADER ";
+		
+		List <InvoiceHeader> invoiceList = jdbcTemplateObject.query(sql, new InvoiceHeaderMapper());
+		
+		int i=0;
+		//logger.info("starting the while loop, size of invoiceList = " + invoiceList.size());
+		//int j = invoiceList.size();
+		while (i < invoiceList.size()) {
+			//logger.info("i = "+ i);
+			String presentCounter = invoiceList.get(i).getPresentCounter();
+			String kidID = invoiceList.get(i).getKidID();
+			//logger.info("PC = "+ presentCounter + "kidID = " + kidID);
+			if (presentCounter.equals("4")) {
+				String sql2 = "UPDATE INVOICE_HEADER SET InvoiceDue= 'Y' "
+						+ " WHERE KidID=?";
+				
+				int rows = jdbcTemplateObject.update(sql2, invoiceList.get(i).getKidID());
+				//logger.info("rows updated = "+ rows);
+				
+			}
+			i++;
+			
+			
+		}
+		
+		
+		
+		
+	}
+
+	public List<FeeMgmt> viewFeeForGroupDate(FeeMgmt data) {
+		
+		String sql = " SELECT F.*, K.KIDNAME "
+				+ " FROM FEEMGMT F, KID K "
+				+ " WHERE F.GroupID= ?"
+				+ " AND F.DateOfAttendance = ? "
+				+ " AND F.KidID=K.KidID "; 
+		
+	    List <FeeMgmt> feeMgmt = jdbcTemplateObject.query(sql,new Object[] 
+	    		{data.getGroupID(), data.getDateOfAttendance() },new ShowKidsFeeMapper());
+	    
+	   
+		return feeMgmt;
 	}
 
 }
