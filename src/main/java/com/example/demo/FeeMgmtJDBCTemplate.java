@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -49,10 +50,34 @@ public class FeeMgmtJDBCTemplate implements FeeMgmtDAO{
 				//check if fee is paid, then decrease its present counter in invoice header by 4
 				// and set the Invoice Due Counter as N
 				if (data.get(i).getFeePaid().equals("Y")) {
-					String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-4, "
-							+ "  InvoiceDue='N' "
-							+ " 	WHERE KidID = ?";
-					jdbcTemplateObject.update(sql3, data.get(i).getKidID());
+						/*String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-4, "
+								+ "  InvoiceDue='N' "
+								+ " 	WHERE KidID = ?";
+						jdbcTemplateObject.update(sql3, data.get(i).getKidID());
+					}*/
+				String sql4 = "SELECT PACKAGE_PackageID from KID WHERE KidID = ?";
+				
+				String packageID = (String)jdbcTemplateObject.queryForObject(
+						sql4, new Object[] { data.get(i).getKidID() }, String.class);
+				
+				switch (packageID) {
+				case "1" :
+					updateInvoiceHeaderFourLessonFeePaid(data.get(i).getKidID() );
+					logger.info("in 1");
+					break;
+				case "2" :
+					
+					updateInvoiceHeaderMonthFeePaid(data.get(i).getKidID() );
+					logger.info("in 2");
+					break;
+				case "3" :
+					updateInvoiceHeaderEveryLessonFeePaid(data.get(i).getKidID());
+					logger.info("in 3");
+					break;
+					
+				}
+				
+				
 				}
 				
 				
@@ -68,6 +93,34 @@ public class FeeMgmtJDBCTemplate implements FeeMgmtDAO{
 		
 		return "SUCCESS ";
 	}
+	
+	public void updateInvoiceHeaderFourLessonFeePaid(String kidID){
+		String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-4, "
+				+ "  InvoiceDue='N' "
+				+ " 	WHERE KidID = ?";
+		jdbcTemplateObject.update(sql3, kidID);
+		
+		
+	}
+	
+	public void updateInvoiceHeaderMonthFeePaid(String kidID){
+		String sql3 = "UPDATE INVOICE_HEADER SET  "
+				+ "  InvoiceDue='N' "
+				+ " 	WHERE KidID = ?";
+		jdbcTemplateObject.update(sql3, kidID);
+		
+		
+	}
+	
+	public void updateInvoiceHeaderEveryLessonFeePaid(String kidID){
+		String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-1, "
+				+ "  InvoiceDue='N' "
+				+ " 	WHERE KidID = ?";
+		jdbcTemplateObject.update(sql3, kidID);
+		
+		
+	}
+	
 
 	@Override
 	public List<FeeMgmt> viewFees(FeeMgmt data) {

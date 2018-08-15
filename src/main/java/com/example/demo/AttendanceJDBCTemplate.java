@@ -1,8 +1,8 @@
 package com.example.demo;
 
+import java.sql.Date;
 import java.sql.SQLException;
-
-
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -64,13 +64,50 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				ps.setString(3,  data.get(i).getKidID());
 				ps.setString(4, data.get(i).getPresentAbsent());
 				
-				//check if child is present, then increase its present counter in invoice header
+				//check what kind of package is the child holding
+				
+				// per class : every present - invoice due 
+				//per month: every start of month, invoice due
+				// per 4 class: every 4 present, invoice due
+				
+				//check package
+				String sql4 = "SELECT PACKAGE_PackageID from KID WHERE KidID = ?";
+				
+				String packageID = (String)jdbcTemplateObject.queryForObject(
+						sql4, new Object[] { data.get(i).getKidID() }, String.class);
+				
 				if (data.get(i).getPresentAbsent().equals("P")) {
-					String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter+1 "
-							+ " 	WHERE KidID = ?";
-					jdbcTemplateObject.update(sql3, data.get(i).getKidID());
+					//String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter+1 "
+							//+ " 	WHERE KidID = ?";
+					//jdbcTemplateObject.update(sql3, data.get(i).getKidID());
+				
+				
+					//List <Kid > kidList = jdbcTemplateObject.query(SQL,new Object[] 
+				    		//{data.get(i).getKidID()} ,new KidMapper());
+					
+					switch (packageID) {
+					case "1" :
+						updateInvoiceHeaderForFourLesson(data.get(i).getKidID(), data.get(i).getDate() );
+						logger.info("in 1");
+						break;
+					case "2" :
+						
+						updateInvoiceHeaderForMonth(data.get(i).getKidID(),data.get(i).getDate() );
+						logger.info("in 2");
+						break;
+					case "3" :
+						updateInvoiceHeaderForEveryLesson(data.get(i).getKidID(),data.get(i).getDate());
+						logger.info("in 3");
+						break;
+						
+					}
+					
+					
 				}
-				//ps.setInt(5, i+11);
+				else if (packageID.equals(2)) {
+					updateInvoiceHeaderForMonth(data.get(i).getKidID(),data.get(i).getDate() );
+					logger.info("in 2");
+				}
 				
 				
 				
@@ -117,6 +154,65 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 		
 		return result ="Success";
 	}
+	
+	public void updateInvoiceHeaderForFourLesson(String kidID, Date date){
+		String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter+1, InvoiceDate= ? "
+		+ " 	WHERE KidID = ?";
+			jdbcTemplateObject.update(sql3, date,kidID);
+			
+			
+		String sql4 = "SELECT PresentCounter FROM INVOICE_HEADER WHERE KidID=?";
+		//List <InvoiceHeader> invoiceList = jdbcTemplateObject.query(sql4, new InvoiceHeaderMapper());
+		String presentCounter = (String)jdbcTemplateObject.queryForObject(
+				sql4, new Object[] { kidID }, String.class);
+		
+		if (presentCounter.equals("4")) {
+			String sql2 = "UPDATE INVOICE_HEADER SET InvoiceDue= 'Y' "
+					+ " WHERE KidID=?";
+			
+			int rows = jdbcTemplateObject.update(sql2, kidID);
+			//logger.info("rows updated = "+ rows);
+			
+		}
+		
+		
+	}
+	
+	public void updateInvoiceHeaderForMonth(String kidID, Date date){
+		//get the date from  invoice header, compare months of invoice header date and attendance date
+		// if different, invoice due, and update the invoice header date, else : do nothing
+		
+		String sql2 = "SELECT MONTH(InvoiceDate) from INVOICE_HEADER WHERE KidID=?";
+		String invoiceDate = (String)jdbcTemplateObject.queryForObject(
+				sql2, new Object[] { kidID }, String.class);
+		
+		String sql5 = "SELECT MONTH(DateOfAttendance) FROM ATTENDANCE WHERE KID_KidID=? AND "
+				+ " DateOfAttendance=?";
+		String attendanceDate = (String)jdbcTemplateObject.queryForObject(
+				sql5, new Object[] { kidID, date }, String.class);
+		
+		if (invoiceDate.equals(attendanceDate)) {
+			String sql3 = "UPDATE INVOICE_HEADER SET InvoiceDate= ? WHERE KidID=?";
+			jdbcTemplateObject.update(sql3,date,kidID);
+		} else {
+			String sql4 = "UPDATE INVOICE_HEADER SET InvoiceDue= 'Y', InvoiceDate=? "
+					+ " WHERE KidID=? ";
+				
+			
+			int rows = jdbcTemplateObject.update(sql4, date,kidID);
+		}
+		
+		
+	}
+	
+	public void updateInvoiceHeaderForEveryLesson(String kidID, Date date){
+		String sql = "UPDATE INVOICE_HEADER SET InvoiceDue= 'Y', InvoiceDate=?  "
+				+ " WHERE KidID=?";
+		
+		int rows = jdbcTemplateObject.update(sql, date,kidID);
+		
+	}
+	
 	
 	
 

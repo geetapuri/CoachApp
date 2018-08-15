@@ -27,7 +27,7 @@ public class ScheduledTasks {
 
     //private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(cron="0 * * * * * ")
+   
     public void updateInvoiceDue () {
     	
     		//logger.info("doing something");

@@ -71,7 +71,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @SpringBootApplication
-@EnableScheduling
+
 @RestController
 @Controller
 

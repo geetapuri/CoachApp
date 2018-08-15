@@ -64,6 +64,16 @@ public class KidJDBCTemplate implements KidDAO {
 		
 		if (resultOfQuery!=0) {
 			
+			String sql4= "SELECT MAX(KidID) from KID ";
+			
+			String kidID= (String)jdbcTemplateObject.queryForObject(
+					sql4,  String.class);
+			
+			String sql3 = "INSERT INTO INVOICE_HEADER (KidID,InvoiceDate,InvoiceAmount,"
+					+ "	InvoiceDue, PresentCounter) VALUES (?, now(), '100', 'N', 0)";
+			
+			int resultOfQuery3 = jdbcTemplateObject.update(sql3, kidID);
+			
 			String SQL2 = "Select * from KID, GROUPOFKIDS where KID.GROUPOFKIDS_GROUPID = ? "
 					+ " AND KID.GROUPOFKIDS_GROUPID = GROUPOFKIDS.GroupID";
 			List<Kid> kids =  jdbcTemplateObject.query(SQL2, new Object[] {kid.getGroupID()}, new KidMapper());
