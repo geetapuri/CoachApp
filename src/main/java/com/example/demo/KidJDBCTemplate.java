@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class KidJDBCTemplate implements KidDAO {
@@ -51,13 +52,30 @@ public class KidJDBCTemplate implements KidDAO {
 		//get parent ID from parentName
 		logger.info("parent name received as " + kid.getParentName());
 		
-		String SQL1 = "SELECT * from PARENT WHERE ParentName =?";
-		List<Parent> parent = jdbcTemplateObject.query(SQL1, new Object[] {kid.getParentName()}, new ParentMapper());
+		
+		String parentID;
+		String SQL1 = "SELECT ParentID from PARENT WHERE ParentName =?";
+		try {
+				 parentID =(String) jdbcTemplateObject.queryForObject(SQL1, 
+			
+									new Object[] {kid.getParentName()}, String.class);
+				
+				
+		} catch (EmptyResultDataAccessException e) {
+			 parentID=null;
+		}
+		
+		if (parentID == null || parentID.equals("")) {
+			String sql5 = "INSERT INTO PARENT (ParentName) VALUES(?)";
+			int resultOfQuery5 = jdbcTemplateObject.update(sql5, kid.getParentName());
+			parentID = (String) jdbcTemplateObject.queryForObject(SQL1, 
+					new Object[] {kid.getParentName()}, String.class);
+		}
 		
 		String SQL = "INSERT INTO KID (GROUPOFKIDS_GROUPID, PACKAGE_PACKAGEID, KidName, ParentID) VALUES (?,?,?,?)";
 		logger.info("inserting groupname as : " + kid.getGroupID());
 		
-		String parentID = parent.get(0).getParentID(); 
+		
 		int resultOfQuery = jdbcTemplateObject.update( SQL, kid.getGroupID(), kid.getPackageID(), kid.getKidName(), parentID );
 		
 		logger.info("result of query = "+ resultOfQuery);

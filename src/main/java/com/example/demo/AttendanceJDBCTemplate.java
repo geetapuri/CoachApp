@@ -206,7 +206,8 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 	}
 	
 	public void updateInvoiceHeaderForEveryLesson(String kidID, Date date){
-		String sql = "UPDATE INVOICE_HEADER SET InvoiceDue= 'Y', InvoiceDate=?  "
+		String sql = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter+1, "
+				+ "	InvoiceDue= 'Y', InvoiceDate=?  "
 				+ " WHERE KidID=?";
 		
 		int rows = jdbcTemplateObject.update(sql, date,kidID);

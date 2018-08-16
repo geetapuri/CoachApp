@@ -28,6 +28,7 @@ public class KidFeeMapper implements RowMapper {
 		kid.setInvoiceAmount(rs.getString("InvoiceAmount"));
 		kid.setInvoiceDue(rs.getString("InvoiceDue"));
 		
+		
 		logger.info("received kidName as  "+ kid.getKidName());
 		logger.info("received kidID as  "+ kid.getKidID());
 		
