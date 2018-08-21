@@ -11,6 +11,9 @@ public class Schedule {
 	private String calendarID;
 	private String kidID;
 	private String coachID;
+	private String parentID;
+	private String kidName;
+
 	
 	public String getCoachID() {
 		return coachID;
@@ -53,6 +56,18 @@ public class Schedule {
 	}
 	public void setKidID(String kidID) {
 		this.kidID = kidID;
+	}
+	public String getParentID() {
+		return parentID;
+	}
+	public void setParentID(String parentID) {
+		this.parentID = parentID;
+	}
+	public String getKidName() {
+		return kidName;
+	}
+	public void setKidName(String kidName) {
+		this.kidName = kidName;
 	}
 	
 }

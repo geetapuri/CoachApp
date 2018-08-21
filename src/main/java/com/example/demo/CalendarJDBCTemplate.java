@@ -231,6 +231,17 @@ public class CalendarJDBCTemplate implements CalendarDAO{
 	   
 	    return returnSchedule;
 	}
+
+	public List<Schedule> getScheduleParentDate(Schedule data) {
+		
+		String sql =  "SELECT P.ParentID, K.KidName, C.Date, C.Time, G.GroupID, G.GroupName "
+				+ "	FROM PARENT P, KID K, CALENDAR C, GROUPOFKIDS G WHERE P.ParentID = K.ParentID " 
+				+ "	AND K.GROUPOFKIDS_GroupID = G.GroupID AND C.GROUPOFKIDS_GroupID = G.GroupID "
+				+ " AND P.ParentID=? AND C.Date=?";
+		
+		List <Schedule> schedule = jdbcTemplateObject.query(sql, new Object[] {data.getParentID(), data.getDate()}, new CalendarMapperParent() );
+		return schedule;
+	}
 }
 
 

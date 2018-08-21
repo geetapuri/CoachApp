@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -125,15 +126,17 @@ public class KidJDBCTemplate implements KidDAO {
 		// TODO Auto-generated method stub
 		logger.info("calling getKidsParent() now ");
 		
-		String SQL = "select KID.KidName, KID.KidID, KID.AVATAR,  "
-				+ 		"GROUPOFKIDS.GroupID, GROUPOFKIDS.GroupName, "
-				+ 		"PACKAGE.PackageName, PACKAGE.PackageID, PARENT.ParentID, PARENT.ParentName  "
-				+ 		"from KID, GROUPOFKIDS, PACKAGE, PARENT"
-				+ 		" where KID.groupOfkids_groupID= GROUPOFKIDS.GroupID "
+		String SQL = "select KID.KidName, KID.AVATAR,  "
+				+ 		" GROUPOFKIDS.GroupName, "
+				+ 		" PACKAGE.PackageName, PACKAGE.PackageID, "
+				+ 		" PARENT.ParentID, PARENT.ParentName,"
+				+ 		" KID_GROUP.GroupID, KID_GROUP.KidID  "
+				+ 		" from KID, GROUPOFKIDS, PACKAGE, PARENT, KID_GROUP"
+				+ 		" where KID.KidID = KID_GROUP.KidID "
+				+ 		" AND KID_GROUP.GroupID = GROUPOFKIDS.GroupID"
 				+ 		" AND KID.package_packageID = PACKAGE.PackageID "
 				+ 		" AND PARENT.ParentID = ? "
 				+ 		" AND KID.ParentID = PARENT.ParentID	" 
-				
 				+ 		" ORDER BY KID.KidID";
 		
 	    List <Kid> kids = jdbcTemplateObject.query(SQL, new Object[] {parentID} ,new CompleteKidMapper());
@@ -147,11 +150,14 @@ public class KidJDBCTemplate implements KidDAO {
 		logger.info("calling getKidsCoach() now ");
 		//String coachID = coach.getCoachID();
 		
-		String SQL = "select KID.KidName, KID.KidID, KID.AVATAR,  "
-				+ 		"GROUPOFKIDS.GroupID, GROUPOFKIDS.GroupName, "
-				+ 		"PACKAGE.PackageName, PACKAGE.PackageID, COACH.coachID, COACH.coachName  "
-				+ 		"from KID, GROUPOFKIDS, PACKAGE, COACH"
-				+ 		" where KID.groupOfkids_groupID= GROUPOFKIDS.GroupID "
+		String SQL = "select KID.KidName, KID.AVATAR,  "
+				+ 		" GROUPOFKIDS.GroupName, "
+				+ 		" PACKAGE.PackageName, PACKAGE.PackageID, "
+				+ 		" COACH.coachID, COACH.coachName, "
+				+ 		" KID_GROUP.GroupID, KID_GROUP.KidID	 "
+				+ 		"from KID, GROUPOFKIDS, PACKAGE, COACH, KID_GROUP "
+				+ 		" where KID.KidID = KID_GROUP.KidID"
+				+ 		" AND KID_GROUP.GroupID= GROUPOFKIDS.GroupID "
 				+ 		" AND KID.package_packageID = PACKAGE.PackageID "
 				+ 		" AND COACH.coachID = ? "
 				+ 		" AND GROUPOFKIDS.CoachID = COACH.coachID	" 				
@@ -220,6 +226,23 @@ public class KidJDBCTemplate implements KidDAO {
 	   
 	    return kid;	
 	}
+	
+	public List<Kid> getKidsFeeParent( String parentID) {
+		//logger.info("calling getKidsFee(groupID) now for groupID = "+ groupID);
+		
+		String SQL = "SELECT K.ParentID, K.KidID, K.KidName, K.GROUPOFKIDS_GroupID, "
+				+ "	I.InvoiceAmount, I.InvoiceDue, G.GroupName " 
+				+ " FROM KID K, GROUPOFKIDS G, INVOICE_HEADER I "
+				+ " WHERE K.ParentID = ? AND K.KidID = I.KidID"
+				+ " AND K.GROUPOFKIDS_GroupID = G.GroupID";
+		
+	    List <Kid> kid = jdbcTemplateObject.query(SQL, new Object[] {parentID}, new KidFeeMapperParent());
+	    
+	   
+	    return kid;	
+	}
+
+	
 	
 	
 

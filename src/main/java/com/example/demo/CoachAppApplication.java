@@ -489,6 +489,32 @@ public class CoachAppApplication {
 	    
 	  }
 	
+	@RequestMapping("/getKidsFeeParent")
+	public @ResponseBody Map<String,Object> getKidsFeeIndividual(@RequestBody Kid data) {
+		//String name;
+	    Map<String,Object> model = new HashMap<String,Object>();
+	    
+	    String parentID = data.getParentID();
+	   
+		
+	    //ToDO 
+	    // get the groupName from data and get Names of kids in that group 
+	    FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	    KidJDBCTemplate  kidJDBCTemplate = 
+		         context.getBean(KidJDBCTemplate.class);
+		
+	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
+		List<Kid> kid = kidJDBCTemplate.getKidsFeeParent(parentID );
+	    
+	    model.put("kidsList", kid);
+	    
+	    context.close();
+	    return model;
+	    
+	  }
+	
 	@CrossOrigin(origins="*")
 	@RequestMapping("/getKids")
 	public @ResponseBody Map<String,Object> getKids(@RequestBody Coach coach) {
@@ -567,6 +593,34 @@ public class CoachAppApplication {
 		
 	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
 	    List<Attendance> attendance = attendanceJDBCTemplate.viewAttendanceKid( data);
+	    
+	    model.put("attendance", attendance);
+	    //model.put("content", "Hello World");
+	    
+	    context.close();
+	    return model;
+	    
+	  }
+	
+	@RequestMapping("/viewAttendanceKidGroup")
+	public @ResponseBody Map<String,Object> viewAttendanceKidGroup(@RequestBody Attendance data) {
+		//String name;
+	    Map<String,Object> model = new HashMap<String,Object>();
+	  
+	  logger.info("Landed view attendance  ");
+	  
+	  FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	    AttendanceJDBCTemplate  attendanceJDBCTemplate = 
+		         context.getBean(AttendanceJDBCTemplate.class);
+	    
+	    //TODO : check if attendance is already marked for the date. 
+	    // If marked, show marked attendance else go to mark attendance
+	    
+		
+	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
+	    List<Attendance> attendance = attendanceJDBCTemplate.viewAttendanceKidGroup( data);
 	    
 	    model.put("attendance", attendance);
 	    //model.put("content", "Hello World");
@@ -854,6 +908,33 @@ public class CoachAppApplication {
 		List<Kid> kids = kidJDBCTemplate.getKidsParent(parentID );
 	    
 	    model.put("kidList", kids);
+	    //model.put("content", "Hello World");
+	    
+	    context.close();
+	    return model;
+	    
+	  }
+	
+	@RequestMapping("/getKidInfoParentToday")
+	public @ResponseBody Map<String,Object> getKidInfoParentToday(@RequestBody Schedule data) {
+		//String name;
+	    Map<String,Object> model = new HashMap<String,Object>();
+	    String parentID = data.getParentID();
+	    Date date = data.getDate();
+	  
+	  logger.info("Kid List to be obtained");
+	  
+	  FileSystemXmlApplicationContext context = 
+				new FileSystemXmlApplicationContext("BeanForCoach.xml");
+	
+	    CalendarJDBCTemplate  calendarJDBCTemplate = 
+		         context.getBean(CalendarJDBCTemplate.class);
+		
+	    List<Schedule> schedule = calendarJDBCTemplate.getScheduleParentDate(data);
+	    
+	    model.put("Schedule", schedule);
+	    
+	    
 	    //model.put("content", "Hello World");
 	    
 	    context.close();

@@ -246,6 +246,25 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 	   
 		return attendance;
 	}
+	
+	public List<Attendance> viewAttendanceKidGroup(Attendance data) {
+		// TODO Auto-generated method stub
+		
+		
+		String SQL = "SELECT K.KidName, A.AttendanceID, A.DateOfAttendance, "
+				+ "	A.PresentAbsent, A.KID_KidID, A.GROUPOFKIDS_GroupID"
+				+ " FROM KID K, ATTENDANCE A WHERE A.KID_KidID=? "
+				+ "	AND A.GROUPOFKIDS_GroupID=? "
+				+ "	AND K.KidID = A.KID_KidID"
+				+ "	ORDER BY "
+				+ " A.DateOfAttendance DESC" ;
+		
+	    List <Attendance> attendance = jdbcTemplateObject.query(SQL,new Object[] 
+	    		{data.getKidID(), data.getGroupID() },new AttendanceMapper());
+	    
+	   
+		return attendance;
+	}
 
 
 
