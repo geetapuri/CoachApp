@@ -20,7 +20,7 @@ public class KidFeeMapper implements RowMapper {
 		kid.setKidName(rs.getString("kidName"));
 		kid.setKidID(rs.getString("kidID"));
 		kid.setPresent("A");
-		kid.setGroupID(rs.getString("groupOfKids_groupID"));
+		kid.setGroupID(rs.getString("GroupID"));
 		//kid.setGroupName(rs.getString("groupName"));
 		kid.setPackageID(rs.getString("Package_packageID"));
 		//kid.setPackageName(rs.getString("packageName"));

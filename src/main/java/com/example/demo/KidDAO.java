@@ -10,7 +10,7 @@ public interface KidDAO {
 	
 	public List<Kid> getKids(String groupID);
 	
-	public List<Kid> addKid(Kid kid);
+	public String addKid(Kid kid);
 	
 	public List<Kid> getKids();
 	

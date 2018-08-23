@@ -16,10 +16,10 @@ public class KidMapper implements RowMapper {
 		// TODO Auto-generated method stub
 		logger.info("in Kid mapper maprow");
 		Kid kid = new Kid();
-		kid.setKidName(rs.getString("kidName"));
-		kid.setKidID(rs.getString("kidID"));
+		kid.setKidName(rs.getString("KidName"));
+		kid.setKidID(rs.getString("KidID"));
 		kid.setPresent("A");
-		kid.setGroupID(rs.getString("groupOfKids_groupID"));
+		kid.setGroupID(rs.getString("GroupID"));
 		//kid.setGroupName(rs.getString("groupName"));
 		kid.setPackageID(rs.getString("Package_packageID"));
 		//kid.setPackageName(rs.getString("packageName"));

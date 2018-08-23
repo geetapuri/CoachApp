@@ -17,7 +17,7 @@ public class CalendarMapperParent implements RowMapper<Schedule>{
 		logger.info("in calendar mapper maprow");
 		Schedule schedule = new Schedule();
 		schedule.setTime(rs.getString("TIME"));
-		schedule.setDate(rs.getDate("Date"));
+		schedule.setDate(rs.getDate("Date").toLocalDate());
 		schedule.setGroupName(rs.getString("GroupName"));
 		schedule.setGroupID(rs.getString("GroupID"));
 		schedule.setParentID(rs.getString("ParentID"));

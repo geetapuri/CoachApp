@@ -59,7 +59,7 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				// TODO Auto-generated method stub
 				
 				//((List<Integer>) data).get(i);
-				ps.setDate(1, data.get(i).getDate());
+				ps.setDate(1, java.sql.Date.valueOf(data.get(i).getDate()));
 				ps.setString(2, data.get(i).getGroupID());
 				ps.setString(3,  data.get(i).getKidID());
 				ps.setString(4, data.get(i).getPresentAbsent());
@@ -87,16 +87,16 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 					
 					switch (packageID) {
 					case "1" :
-						updateInvoiceHeaderForFourLesson(data.get(i).getKidID(), data.get(i).getDate() );
+						updateInvoiceHeaderForFourLesson(data.get(i).getKidID(), java.sql.Date.valueOf(data.get(i).getDate() ));
 						logger.info("in 1");
 						break;
 					case "2" :
 						
-						updateInvoiceHeaderForMonth(data.get(i).getKidID(),data.get(i).getDate() );
+						updateInvoiceHeaderForMonth(data.get(i).getKidID(),java.sql.Date.valueOf(data.get(i).getDate() ));
 						logger.info("in 2");
 						break;
 					case "3" :
-						updateInvoiceHeaderForEveryLesson(data.get(i).getKidID(),data.get(i).getDate());
+						updateInvoiceHeaderForEveryLesson(data.get(i).getKidID(),java.sql.Date.valueOf(data.get(i).getDate()));
 						logger.info("in 3");
 						break;
 						
@@ -105,7 +105,7 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 					
 				}
 				else if (packageID.equals(2)) {
-					updateInvoiceHeaderForMonth(data.get(i).getKidID(),data.get(i).getDate() );
+					updateInvoiceHeaderForMonth(data.get(i).getKidID(),java.sql.Date.valueOf(data.get(i).getDate() ));
 					logger.info("in 2");
 				}
 				
@@ -131,7 +131,7 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				// TODO Auto-generated method stub
 				
 				//((List<Integer>) data).get(i);
-				ps.setDate(1, data.get(i).getDate());
+				ps.setDate(1, java.sql.Date.valueOf(data.get(i).getDate()));
 				ps.setString(2, data.get(i).getPresentAbsent());
 				ps.setString(3, "N");
 				ps.setString(4,  data.get(i).getKidID());
@@ -277,7 +277,7 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 				+ " ORDER BY  A.DateOfAttendance DESC";  
 		
 	    List <Attendance> attendance = jdbcTemplateObject.query(SQL,new Object[] 
-	    		{data.getGroupID(), data.getDate() },new AttendanceMapper());
+	    		{data.getGroupID(), java.sql.Date.valueOf(data.getDate()) },new AttendanceMapper());
 	    
 	   
 		return attendance;

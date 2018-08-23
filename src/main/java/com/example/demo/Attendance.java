@@ -1,10 +1,11 @@
 package com.example.demo;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class Attendance {
 	
-	private java.sql.Date date;
+	private LocalDate date;
 	private String groupID;
 	private String kidID;
 	private String presentAbsent;
@@ -24,10 +25,10 @@ public class Attendance {
 	public void setKidName(String kidName) {
 		this.kidName = kidName;
 	}
-	public java.sql.Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
-	public void setDate(java.sql.Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	public String getGroupID() {

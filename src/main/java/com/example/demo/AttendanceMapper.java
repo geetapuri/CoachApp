@@ -19,7 +19,7 @@ public class AttendanceMapper implements RowMapper {
 		attendance.setKidID(rs.getString("KID_KIDID"));
 		attendance.setGroupID(rs.getString("GROUPOFKIDS_GROUPID"));
 		attendance.setPresentAbsent(rs.getString("PRESENTABSENT"));
-		attendance.setDate(rs.getDate("DATEOFATTENDANCE"));
+		attendance.setDate(rs.getDate("DATEOFATTENDANCE").toLocalDate());
 		attendance.setKidName(rs.getString("KIDNAME"));
 		attendance.setAttendanceID(rs.getString("AttendanceID"));
 		

@@ -1,11 +1,13 @@
 package com.example.demo;
 
-import java.sql.Date;
+//import java.sql.Date;
+import java.time.LocalDate;
 
 public class Schedule {
 
 	private String time;
-	private Date date;
+	private LocalDate date;
+	private String strDate;
 	private String groupName;
 	private String groupID;
 	private String calendarID;
@@ -13,6 +15,7 @@ public class Schedule {
 	private String coachID;
 	private String parentID;
 	private String kidName;
+	private String repeat;
 
 	
 	public String getCoachID() {
@@ -33,10 +36,10 @@ public class Schedule {
 	public void setTime(String time) {
 		this.time = time;
 	}
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	public String getGroupName() {
@@ -68,6 +71,18 @@ public class Schedule {
 	}
 	public void setKidName(String kidName) {
 		this.kidName = kidName;
+	}
+	public String getRepeat() {
+		return repeat;
+	}
+	public void setRepeat(String repeat) {
+		this.repeat = repeat;
+	}
+	public String getStrDate() {
+		return strDate;
+	}
+	public void setStrDate(String strDate) {
+		this.strDate = strDate;
 	}
 	
 }

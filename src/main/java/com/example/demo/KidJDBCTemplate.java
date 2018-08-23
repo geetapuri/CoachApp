@@ -30,12 +30,13 @@ public class KidJDBCTemplate implements KidDAO {
 		// TODO Auto-generated method stub
 		logger.info("calling getKids(groupID) now for groupID = "+ groupID);
 		
-		String SQL = "select KID.KidName, KID.KidID, KID.GROUPOFKIDS_GroupID, KID.PACKAGE_PACKAGEID, "
+		String SQL = "select KID.KidName,  KID.PACKAGE_PACKAGEID, KID_GROUP.KidID, KID_GROUP.GroupID,"
 				+ " GROUPOFKIDS.CoachID "
-				+ " from KID, GROUPOFKIDS"
+				+ " from KID, KID_GROUP, GROUPOFKIDS"
 				+ " where "
-				+ " KID.GROUPOFKIDS_GROUPID = ? "
-				+ " AND KID.GROUPOFKIDS_GROUPID = GROUPOFKIDS.GroupID ";
+				+ " KID.KidID = KID_GROUP.KidID"
+				+ " AND KID_GROUP.GroupID = ? "
+				+ " AND KID_GROUP.GroupID = GROUPOFKIDS.GroupID ";
 		
 	    List <Kid> kid = jdbcTemplateObject.query(SQL, new Object[] {groupID}, new KidMapper());
 	    
@@ -48,7 +49,7 @@ public class KidJDBCTemplate implements KidDAO {
 	}
 
 	@Override
-	public List<Kid> addKid(Kid kid) {
+	public String addKid(Kid kid) {
 		
 		//get parent ID from parentName
 		logger.info("parent name received as " + kid.getParentName());
@@ -73,11 +74,11 @@ public class KidJDBCTemplate implements KidDAO {
 					new Object[] {kid.getParentName()}, String.class);
 		}
 		
-		String SQL = "INSERT INTO KID (GROUPOFKIDS_GROUPID, PACKAGE_PACKAGEID, KidName, ParentID) VALUES (?,?,?,?)";
+		String SQL = "INSERT INTO KID ( PACKAGE_PACKAGEID, KidName, ParentID) VALUES (?,?,?)";
 		logger.info("inserting groupname as : " + kid.getGroupID());
 		
 		
-		int resultOfQuery = jdbcTemplateObject.update( SQL, kid.getGroupID(), kid.getPackageID(), kid.getKidName(), parentID );
+		int resultOfQuery = jdbcTemplateObject.update( SQL, kid.getPackageID(), kid.getKidName(), parentID );
 		
 		logger.info("result of query = "+ resultOfQuery);
 		
@@ -85,19 +86,25 @@ public class KidJDBCTemplate implements KidDAO {
 			
 			String sql4= "SELECT MAX(KidID) from KID ";
 			
+			
+			
 			String kidID= (String)jdbcTemplateObject.queryForObject(
 					sql4,  String.class);
+			
+			String sql6 = "INSERT INTO KID_GROUP (KidID, GroupID) VALUES (?,?)";
+			
+			int resultOfQuery6 = jdbcTemplateObject.update(sql6, kidID, kid.getGroupID());
 			
 			String sql3 = "INSERT INTO INVOICE_HEADER (KidID,InvoiceDate,InvoiceAmount,"
 					+ "	InvoiceDue, PresentCounter) VALUES (?, now(), '100', 'N', 0)";
 			
 			int resultOfQuery3 = jdbcTemplateObject.update(sql3, kidID);
 			
-			String SQL2 = "Select * from KID, GROUPOFKIDS where KID.GROUPOFKIDS_GROUPID = ? "
-					+ " AND KID.GROUPOFKIDS_GROUPID = GROUPOFKIDS.GroupID";
-			List<Kid> kids =  jdbcTemplateObject.query(SQL2, new Object[] {kid.getGroupID()}, new KidMapper());
+			//String SQL2 = "Select * from KID, GROUPOFKIDS where KID.GROUPOFKIDS_GROUPID = ? "
+					//+ " AND KID.GROUPOFKIDS_GROUPID = GROUPOFKIDS.GroupID";
+			//List<Kid> kids =  jdbcTemplateObject.query(SQL2, new Object[] {kid.getGroupID()}, new KidMapper());
 			
-			return kids;
+			return "SUCCESS";
 			}
 			else return null;
 		
@@ -201,8 +208,9 @@ public class KidJDBCTemplate implements KidDAO {
 		logger.info("calling getKidsList() now ");
 		String coachID=coach.getCoachID();
 		
-		String SQL = "SELECT * FROM KID K,  GROUPOFKIDS G "
-				+ " where K.GROUPOFKIDS_GroupID = G.GroupID "
+		String SQL = "SELECT * FROM KID K,  KID_GROUP KG , GROUPOFKIDS G "
+				+ " where KG.GroupID = G.GroupID "
+				+ " AND K.KidID = KG.KidID "
 				+ " AND G.CoachID= ?";
 		
 	    List <Kid> kidsList = jdbcTemplateObject.query(SQL,new Object[] {coachID}, new KidMapper());
@@ -213,12 +221,14 @@ public class KidJDBCTemplate implements KidDAO {
 	public List<Kid> getKidsFee(String groupID) {
 		logger.info("calling getKidsFee(groupID) now for groupID = "+ groupID);
 		
-		String SQL = "select KID.KidName, KID.KidID, KID.GROUPOFKIDS_GroupID, KID.PACKAGE_PACKAGEID, "
+		String SQL = "select KID.KidName,  KID.PACKAGE_PACKAGEID,"
+				+ " KID_GROUP.KidID, KID_GROUP.GroupID, "
 				+ " GROUPOFKIDS.CoachID, INVOICE_HEADER.InvoiceAmount, INVOICE_HEADER.InvoiceDue "
-				+ " from KID, GROUPOFKIDS, INVOICE_HEADER"
+				+ " from KID, KID_GROUP, GROUPOFKIDS, INVOICE_HEADER"
 				+ " where "
-				+ " KID.GROUPOFKIDS_GROUPID = ? "
-				+ " AND KID.GROUPOFKIDS_GROUPID = GROUPOFKIDS.GroupID "
+				+ " KID_GROUP.GroupID = ? "
+				+ " AND KID_GROUP.GROUPID = GROUPOFKIDS.GroupID "
+				+ " AND KID_GROUP.KidID = KID.KidID "
 				+ " AND KID.KidID = INVOICE_HEADER.KidID ";
 		
 	    List <Kid> kid = jdbcTemplateObject.query(SQL, new Object[] {groupID}, new KidFeeMapper());
@@ -230,11 +240,12 @@ public class KidJDBCTemplate implements KidDAO {
 	public List<Kid> getKidsFeeParent( String parentID) {
 		//logger.info("calling getKidsFee(groupID) now for groupID = "+ groupID);
 		
-		String SQL = "SELECT K.ParentID, K.KidID, K.KidName, K.GROUPOFKIDS_GroupID, "
+		String SQL = "SELECT K.ParentID, K.KidName, KG.KidID, KG.GroupID, "
 				+ "	I.InvoiceAmount, I.InvoiceDue, G.GroupName " 
-				+ " FROM KID K, GROUPOFKIDS G, INVOICE_HEADER I "
+				+ " FROM KID K, KID_GROUP KG, GROUPOFKIDS G, INVOICE_HEADER I "
 				+ " WHERE K.ParentID = ? AND K.KidID = I.KidID"
-				+ " AND K.GROUPOFKIDS_GroupID = G.GroupID";
+				+ " And K.KidID = KG.KidID"
+				+ " AND KG.GroupID = G.GroupID";
 		
 	    List <Kid> kid = jdbcTemplateObject.query(SQL, new Object[] {parentID}, new KidFeeMapperParent());
 	    

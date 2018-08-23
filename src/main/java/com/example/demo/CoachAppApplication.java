@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -246,7 +247,7 @@ public class CoachAppApplication {
 	    
 	    
 	    
-	    Date date = data.getDate();
+	    LocalDate date = data.getDate();
 	   logger.info("First use of logger! date = "+ date);
 		
 		//System.out.println("Date is "+ date);
@@ -273,7 +274,7 @@ public class CoachAppApplication {
 	    Map<String,Object> model = new HashMap<String,Object>();
 	    logger.info("check attendance landed");
 		
-	    Date date = data.getDate();
+	    LocalDate date = data.getDate();
 	   logger.info("First use of logger! date = "+ date);
 		
 	    //ToDO 
@@ -920,7 +921,7 @@ public class CoachAppApplication {
 		//String name;
 	    Map<String,Object> model = new HashMap<String,Object>();
 	    String parentID = data.getParentID();
-	    Date date = data.getDate();
+	    LocalDate date = data.getDate();
 	  
 	  logger.info("Kid List to be obtained");
 	  
@@ -983,9 +984,9 @@ public class CoachAppApplication {
 		         context.getBean(KidJDBCTemplate.class);
 		
 	    //List<Kids> kids = kidsJDBCTemplate.listAllKids();
-		List<Kid> kids = kidJDBCTemplate.addKid( data);
+		String result = kidJDBCTemplate.addKid( data);
 	    
-	    model.put("kidList", kids);
+	    model.put("result", result);
 	    //model.put("content", "Hello World");
 	    
 	    context.close();
