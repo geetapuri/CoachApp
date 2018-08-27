@@ -16,13 +16,13 @@ public class CompleteKidMapper implements RowMapper{
 		// TODO Auto-generated method stub
 		logger.info("in Kid mapper maprow");
 		Kid kid = new Kid();
-		kid.setKidName(rs.getString("kidName"));
-		kid.setKidID(rs.getString("kidID"));
+		kid.setKidName(rs.getString("KidName"));
+		kid.setKidID(rs.getString("KidID"));
 		kid.setPresent("A");
-		kid.setGroupID(rs.getString("groupID"));
-		kid.setGroupName(rs.getString("groupName"));
-		kid.setPackageID(rs.getString("packageID"));
-		kid.setPackageName(rs.getString("packageName"));
+		kid.setGroupID(rs.getString("GroupID"));
+		kid.setGroupName(rs.getString("GroupName"));
+		kid.setPackageID(rs.getString("PackageID"));
+		kid.setPackageName(rs.getString("PackageName"));
 		kid.setAvatarSrc(rs.getString("AVATAR"));
 		
 		logger.info("received kidName as  "+ kid.getKidName());

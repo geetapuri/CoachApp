@@ -29,10 +29,11 @@ private static Logger logger = LogManager.getLogger(GroupJDBCTemplate.class);
 		
 		List <GroupOfKids> result = null;
 		
-		String SQL = "INSERT INTO GROUPOFKIDS (GROUPNAME, CoachID) VALUES (?,?)";
+		String SQL = "INSERT INTO GROUPOFKIDS (GROUPNAME, FeeAmount, CoachID, PackageID) VALUES (?,?,?,?)";
 		logger.info("inserting groupname as : " + data.getGroupName());
 		
-		int resultOfQuery = jdbcTemplateObject.update( SQL, data.getGroupName(), data.getCoachID() );
+		int resultOfQuery = jdbcTemplateObject.update( SQL, data.getGroupName(), data.getFeeAmount(),
+														data.getCoachID(), data.getPackageID()  );
 		
 		logger.info("result of query after insert into groupofkids = "+ resultOfQuery);
 		
@@ -67,10 +68,10 @@ private static Logger logger = LogManager.getLogger(GroupJDBCTemplate.class);
 		
 		logger.info("calling updateKid method now");
 		
-		String SQL = "UPDATE GROUPOFKIDS SET GroupName=? " +
-					"WHERE GroupID=?";
+		String SQL = "UPDATE GROUPOFKIDS SET GroupName=?, FeeAmount=? , PackageID=?  "
+					+ " WHERE GroupID=?";
 		
-		int result = jdbcTemplateObject.update(SQL, data.getGroupName(), 
+		int result = jdbcTemplateObject.update(SQL, data.getGroupName(), data.getFeeAmount(), data.getPackageID(),
 													data.getGroupID());
 		
 		logger.info("updated "+ result + "records");

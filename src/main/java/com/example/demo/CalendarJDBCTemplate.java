@@ -101,11 +101,15 @@ public class CalendarJDBCTemplate implements CalendarDAO{
 		int resultOfQuery = jdbcTemplateObject.update( SQL, schedule.getGroupID(), schedule.getTime(), java.sql.Date.valueOf(schedule.getDate()) );
 		LocalDate dateToInsert = schedule.getDate();
 		
-		//To Add entries for scheduled class for a year
-		for (int i=0; i<52; i++) {
-			
-			dateToInsert = dateToInsert.plusDays(7);
-			int result = jdbcTemplateObject.update(SQL, schedule.getGroupID(), schedule.getTime(), java.sql.Date.valueOf(dateToInsert));
+		//To Add entries for scheduled class for a year, if repeat is set
+		if (schedule.getRepeat().equals(null) || schedule.getRepeat().equals("")) {
+			//dont add recurring classes
+		} else {
+			for (int i=0; i<52; i++) {
+				
+				dateToInsert = dateToInsert.plusDays(7);
+				int result = jdbcTemplateObject.update(SQL, schedule.getGroupID(), schedule.getTime(), java.sql.Date.valueOf(dateToInsert));
+			}
 		}
 		
 			

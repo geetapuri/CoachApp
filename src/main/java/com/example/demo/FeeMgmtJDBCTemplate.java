@@ -55,10 +55,10 @@ public class FeeMgmtJDBCTemplate implements FeeMgmtDAO{
 								+ " 	WHERE KidID = ?";
 						jdbcTemplateObject.update(sql3, data.get(i).getKidID());
 					}*/
-				String sql4 = "SELECT PACKAGE_PackageID from KID WHERE KidID = ?";
+				String sql4 = "SELECT PackageID from GROUPOFKIDS WHERE GroupID = ?";
 				
 				String packageID = (String)jdbcTemplateObject.queryForObject(
-						sql4, new Object[] { data.get(i).getKidID() }, String.class);
+						sql4, new Object[] { data.get(i).getGroupID() }, String.class);
 				
 				switch (packageID) {
 				case "1" :

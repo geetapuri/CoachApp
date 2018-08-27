@@ -30,8 +30,8 @@ public class KidJDBCTemplate implements KidDAO {
 		// TODO Auto-generated method stub
 		logger.info("calling getKids(groupID) now for groupID = "+ groupID);
 		
-		String SQL = "select KID.KidName,  KID.PACKAGE_PACKAGEID, KID_GROUP.KidID, KID_GROUP.GroupID,"
-				+ " GROUPOFKIDS.CoachID "
+		String SQL = "select KID.KidName, KID_GROUP.KidID, KID_GROUP.GroupID,"
+				+ " GROUPOFKIDS.CoachID, GROUPOFKIDS.PackageID "
 				+ " from KID, KID_GROUP, GROUPOFKIDS"
 				+ " where "
 				+ " KID.KidID = KID_GROUP.KidID"
@@ -74,11 +74,11 @@ public class KidJDBCTemplate implements KidDAO {
 					new Object[] {kid.getParentName()}, String.class);
 		}
 		
-		String SQL = "INSERT INTO KID ( PACKAGE_PACKAGEID, KidName, ParentID) VALUES (?,?,?)";
+		String SQL = "INSERT INTO KID ( KidName, ParentID) VALUES (?,?)";
 		logger.info("inserting groupname as : " + kid.getGroupID());
 		
 		
-		int resultOfQuery = jdbcTemplateObject.update( SQL, kid.getPackageID(), kid.getKidName(), parentID );
+		int resultOfQuery = jdbcTemplateObject.update( SQL,  kid.getKidName(), parentID );
 		
 		logger.info("result of query = "+ resultOfQuery);
 		
@@ -95,10 +95,15 @@ public class KidJDBCTemplate implements KidDAO {
 			
 			int resultOfQuery6 = jdbcTemplateObject.update(sql6, kidID, kid.getGroupID());
 			
-			String sql3 = "INSERT INTO INVOICE_HEADER (KidID,InvoiceDate,InvoiceAmount,"
-					+ "	InvoiceDue, PresentCounter) VALUES (?, now(), '100', 'N', 0)";
+			String sql7 = "SELECT FeeAmount From GROUPOFKIDS WHERE GroupID=?";
 			
-			int resultOfQuery3 = jdbcTemplateObject.update(sql3, kidID);
+			String feeAmount = (String)jdbcTemplateObject.queryForObject(
+					sql7, new Object[] { kid.getGroupID() }, String.class);
+			
+			String sql3 = "INSERT INTO INVOICE_HEADER (KidID, GroupID, InvoiceDate,InvoiceAmount,"
+					+ "	InvoiceDue, PresentCounter) VALUES (?,?, now(), ?, 'N', 0)";
+			
+			int resultOfQuery3 = jdbcTemplateObject.update(sql3, kidID, kid.getGroupID(), feeAmount);
 			
 			//String SQL2 = "Select * from KID, GROUPOFKIDS where KID.GROUPOFKIDS_GROUPID = ? "
 					//+ " AND KID.GROUPOFKIDS_GROUPID = GROUPOFKIDS.GroupID";
@@ -120,7 +125,7 @@ public class KidJDBCTemplate implements KidDAO {
 				+ 		"PACKAGE.PackageName, PACKAGE.PackageID  "
 				+ 		"from KID, GROUPOFKIDS, PACKAGE"
 				+ 		" where KID.groupOfkids_groupID= GROUPOFKIDS.GroupID "
-				+ 		" AND KID.package_packageID = PACKAGE.PackageID "
+				+ 		" AND GROUPOFKIDS.PackageID = PACKAGE.PackageID "
 				+ 		" ORDER BY KID.KidID";
 		
 	    List <Kid> kids = jdbcTemplateObject.query(SQL, new CompleteKidMapper());
@@ -141,7 +146,7 @@ public class KidJDBCTemplate implements KidDAO {
 				+ 		" from KID, GROUPOFKIDS, PACKAGE, PARENT, KID_GROUP"
 				+ 		" where KID.KidID = KID_GROUP.KidID "
 				+ 		" AND KID_GROUP.GroupID = GROUPOFKIDS.GroupID"
-				+ 		" AND KID.package_packageID = PACKAGE.PackageID "
+				+ 		" AND GROUPOFKIDS.PackageID = PACKAGE.PackageID "
 				+ 		" AND PARENT.ParentID = ? "
 				+ 		" AND KID.ParentID = PARENT.ParentID	" 
 				+ 		" ORDER BY KID.KidID";
@@ -165,7 +170,7 @@ public class KidJDBCTemplate implements KidDAO {
 				+ 		"from KID, GROUPOFKIDS, PACKAGE, COACH, KID_GROUP "
 				+ 		" where KID.KidID = KID_GROUP.KidID"
 				+ 		" AND KID_GROUP.GroupID= GROUPOFKIDS.GroupID "
-				+ 		" AND KID.package_packageID = PACKAGE.PackageID "
+				+ 		" AND GROUPOFKIDS.PackageID = PACKAGE.PackageID "
 				+ 		" AND COACH.coachID = ? "
 				+ 		" AND GROUPOFKIDS.CoachID = COACH.coachID	" 				
 				+ 		" ORDER BY GROUPOFKIDS.GroupID, KidName";
@@ -221,9 +226,10 @@ public class KidJDBCTemplate implements KidDAO {
 	public List<Kid> getKidsFee(String groupID) {
 		logger.info("calling getKidsFee(groupID) now for groupID = "+ groupID);
 		
-		String SQL = "select KID.KidName,  KID.PACKAGE_PACKAGEID,"
+		String SQL = "select KID.KidName,  "
 				+ " KID_GROUP.KidID, KID_GROUP.GroupID, "
-				+ " GROUPOFKIDS.CoachID, INVOICE_HEADER.InvoiceAmount, INVOICE_HEADER.InvoiceDue "
+				+ " GROUPOFKIDS.CoachID, GROUPOFKIDS.PackageID, "
+				+ " INVOICE_HEADER.InvoiceAmount, INVOICE_HEADER.InvoiceDue "
 				+ " from KID, KID_GROUP, GROUPOFKIDS, INVOICE_HEADER"
 				+ " where "
 				+ " KID_GROUP.GroupID = ? "

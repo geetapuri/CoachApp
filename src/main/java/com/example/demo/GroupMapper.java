@@ -22,6 +22,9 @@ public class GroupMapper implements RowMapper {
 		groupList.setGroupName(rs.getString("GroupName"));
 		groupList.setGroupID(rs.getString("GroupID"));
 		groupList.setCoachID(rs.getString("CoachID"));
+		groupList.setFeeAmount(rs.getString("FeeAmount"));
+		groupList.setPackageID(rs.getString("PackageID"));
+		
 		
 		logger.info("group name = "+ groupList.getGroupName());
 		return groupList;

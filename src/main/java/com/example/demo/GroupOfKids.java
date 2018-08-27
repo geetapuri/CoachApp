@@ -9,6 +9,8 @@ public class GroupOfKids {
 	private String groupName;
 	private String groupID;
 	private String coachID;
+	private String feeAmount;
+	private String packageID;
 	
 	public String getGroupName() {
 		return groupName;
@@ -27,6 +29,18 @@ public class GroupOfKids {
 	}
 	public void setCoachID(String coachID) {
 		this.coachID = coachID;
+	}
+	public String getFeeAmount() {
+		return feeAmount;
+	}
+	public void setFeeAmount(String feeAmount) {
+		this.feeAmount = feeAmount;
+	}
+	public String getPackageID() {
+		return packageID;
+	}
+	public void setPackageID(String packageID) {
+		this.packageID = packageID;
 	}
 
 }
