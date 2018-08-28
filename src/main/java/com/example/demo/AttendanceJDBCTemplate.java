@@ -96,7 +96,8 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 						logger.info("in 2");
 						break;
 					case "3" :
-						updateInvoiceHeaderForEveryLesson(data.get(i).getKidID(),java.sql.Date.valueOf(data.get(i).getDate()));
+						updateInvoiceHeaderForEveryLesson(data.get(i).getKidID(),java.sql.Date.valueOf(data.get(i).getDate()), 
+														data.get(i).getGroupID());
 						logger.info("in 3");
 						break;
 						
@@ -205,12 +206,27 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 		
 	}
 	
-	public void updateInvoiceHeaderForEveryLesson(String kidID, Date date){
+	public void updateInvoiceHeaderForEveryLesson(String kidID, Date date, String groupID){
 		String sql = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter+1, "
 				+ "	InvoiceDue= 'Y', InvoiceDate=?  "
-				+ " WHERE KidID=?";
+				+ " WHERE KidID=? AND GroupID=?";
 		
-		int rows = jdbcTemplateObject.update(sql, date,kidID);
+		int rows = jdbcTemplateObject.update(sql, date,kidID, groupID);
+		
+		String sql2 = "SELECT PresentCounter FROM INVOICE_HEADER WHERE "
+				+ 	"	KidID=? AND GroupID =?";
+		
+		Integer presentCounter = jdbcTemplateObject.queryForObject(
+				sql2, new Object[] { kidID, groupID }, Integer.class);
+		
+		if(presentCounter >= 1) {
+			String sql3 = "UPDATE INVOICE_HEADER SET InvoiceAmount= 15*PresentCounter WHERE "
+					+ "	KidID=? AND GroupID=? AND InvoiceDate =?";
+			
+			int rowsToUpdate = jdbcTemplateObject.update(sql3, kidID, groupID, date); 
+		} else {
+			return;
+		}
 		
 	}
 	

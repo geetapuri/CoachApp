@@ -55,23 +55,27 @@ public class FeeMgmtJDBCTemplate implements FeeMgmtDAO{
 								+ " 	WHERE KidID = ?";
 						jdbcTemplateObject.update(sql3, data.get(i).getKidID());
 					}*/
+				String kidID = data.get(i).getKidID();
+				String groupID = data.get(i).getGroupID();
+				String invoiceDate = data.get(i).getDateOfAttendance();
+					
 				String sql4 = "SELECT PackageID from GROUPOFKIDS WHERE GroupID = ?";
 				
 				String packageID = (String)jdbcTemplateObject.queryForObject(
-						sql4, new Object[] { data.get(i).getGroupID() }, String.class);
+						sql4, new Object[] { groupID }, String.class);
 				
 				switch (packageID) {
 				case "1" :
-					updateInvoiceHeaderFourLessonFeePaid(data.get(i).getKidID() );
+					updateInvoiceHeaderFourLessonFeePaid(kidID, groupID, invoiceDate  );
 					logger.info("in 1");
 					break;
 				case "2" :
 					
-					updateInvoiceHeaderMonthFeePaid(data.get(i).getKidID() );
+					updateInvoiceHeaderMonthFeePaid(kidID, groupID, invoiceDate );
 					logger.info("in 2");
 					break;
 				case "3" :
-					updateInvoiceHeaderEveryLessonFeePaid(data.get(i).getKidID());
+					updateInvoiceHeaderEveryLessonFeePaid(kidID, groupID, invoiceDate);
 					logger.info("in 3");
 					break;
 					
@@ -94,29 +98,104 @@ public class FeeMgmtJDBCTemplate implements FeeMgmtDAO{
 		return "SUCCESS ";
 	}
 	
-	public void updateInvoiceHeaderFourLessonFeePaid(String kidID){
-		String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-4, "
-				+ "  InvoiceDue='N' "
-				+ " 	WHERE KidID = ?";
-		jdbcTemplateObject.update(sql3, kidID);
+	public void updateInvoiceHeaderFourLessonFeePaid(String kidID, String groupID, String invoiceDate){
+		String sql4 = "SELECT InvoiceDue FROM INVOICE_HEADER "
+				+ 		" WHERE KidID=? AND GroupID=? ";
 		
+		String invoiceDue = (String)jdbcTemplateObject.queryForObject(
+				sql4, new Object[] { kidID, groupID }, String.class);
+		
+		String sql5 = "SELECT InvoiceAmount FROM INVOICE_HEADER "
+				+ 		" WHERE KidID=? AND GroupID = ?";
+		
+		String invoiceAmount = (String)jdbcTemplateObject.queryForObject(
+				sql5, new Object[] { kidID, groupID }, String.class);
+		
+		if(invoiceDue.equals("Y")) {
+			if (invoiceAmount.equals("100")) {
+				String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-4, "
+						+ "  InvoiceDue='N' , InvoiceAmount=InvoiceAmount-100"
+						+ " 	WHERE KidID = ? AND GroupID=? ";
+				jdbcTemplateObject.update(sql3, kidID, groupID);
+			} else {
+				String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-4, "
+						+ "  InvoiceDue='Y' , InvoiceAmount=InvoiceAmount-100"
+						+ " 	WHERE KidID = ? AND GroupID=? ";
+				jdbcTemplateObject.update(sql3, kidID, groupID);
+			}
+		} else {
+			return;
+		}
 		
 	}
 	
-	public void updateInvoiceHeaderMonthFeePaid(String kidID){
-		String sql3 = "UPDATE INVOICE_HEADER SET  "
-				+ "  InvoiceDue='N' "
-				+ " 	WHERE KidID = ?";
-		jdbcTemplateObject.update(sql3, kidID);
+	public void updateInvoiceHeaderMonthFeePaid(String kidID, String groupID, String invoiceDate){
+		String sql4 = "SELECT InvoiceDue FROM INVOICE_HEADER "
+				+ 		" WHERE KidID=? AND GroupID=?";
 		
+		String invoiceDue = (String)jdbcTemplateObject.queryForObject(
+				sql4, new Object[] { kidID, groupID }, String.class);
+		
+		String sql5 = "SELECT InvoiceAmount FROM INVOICE_HEADER "
+				+ 		" WHERE KidID=? AND GroupID = ?";
+		
+		String invoiceAmount = (String)jdbcTemplateObject.queryForObject(
+				sql5, new Object[] { kidID, groupID }, String.class);
+		
+		if(invoiceDue.equals("Y")) {
+			if (invoiceAmount.equals("70")) {
+		
+				String sql3 = "UPDATE INVOICE_HEADER SET  "
+					+ "  InvoiceDue='N', InvoiceAmount= InvoiceAmount-70 "
+					+ " 	WHERE KidID = ? AND GroupID=? ";
+				jdbcTemplateObject.update(sql3, kidID, groupID);
+			} else {
+				
+				String sql3 = "UPDATE INVOICE_HEADER SET  "
+						+ "  InvoiceDue='Y', InvoiceAmount= InvoiceAmount-70 "
+						+ " 	WHERE KidID = ? AND GroupID=? ";
+					jdbcTemplateObject.update(sql3, kidID, groupID);
+			
+			}
+		} else {
+			return;
+		}
 		
 	}
 	
-	public void updateInvoiceHeaderEveryLessonFeePaid(String kidID){
-		String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-1, "
-				+ "  InvoiceDue='N' "
-				+ " 	WHERE KidID = ?";
-		jdbcTemplateObject.update(sql3, kidID);
+	public void updateInvoiceHeaderEveryLessonFeePaid(String kidID, String groupID, String invoiceDate){
+		String sql4 = "SELECT InvoiceDue FROM INVOICE_HEADER "
+				+ 		" WHERE KidID=? AND GroupID=?";
+		
+		String invoiceDue = (String)jdbcTemplateObject.queryForObject(
+				sql4, new Object[] { kidID, groupID }, String.class);
+		
+		String sql5 = "SELECT InvoiceAmount FROM INVOICE_HEADER "
+				+ 		" WHERE KidID=? AND GroupID = ?";
+		
+		String invoiceAmount = (String)jdbcTemplateObject.queryForObject(
+				sql5, new Object[] { kidID, groupID }, String.class);
+		
+		if(invoiceDue.equals("Y")) {
+				if (invoiceAmount.equals("15")) {
+					String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-1, "
+							+ "  InvoiceDue='N' , InvoiceAmount=InvoiceAmount-15 "
+							+ " 	WHERE KidID = ? AND GroupID=? ";
+					jdbcTemplateObject.update(sql3, kidID, groupID);
+				} else {
+					String sql3 = "UPDATE INVOICE_HEADER SET PresentCounter=PresentCounter-1, "
+							+ "  InvoiceDue='Y' , InvoiceAmount=InvoiceAmount-15 "
+							+ " 	WHERE KidID = ? AND GroupID=? ";
+					jdbcTemplateObject.update(sql3, kidID, groupID);
+				
+				}
+		}
+			
+		else {
+			return;
+		}
+		
+		
 		
 		
 	}
