@@ -120,11 +120,13 @@ public class KidJDBCTemplate implements KidDAO {
 		// TODO Auto-generated method stub
 		logger.info("calling getKids() now ");
 		
-		String SQL = "select KID.KidName, KID.KidID,  "
+		String SQL = "select KID.KidName, "
+				+ 		"KID_GROUP.KidID, KID.GroupID,  "
 				+ 		"GROUPOFKIDS.GroupID, GROUPOFKIDS.GroupName, "
 				+ 		"PACKAGE.PackageName, PACKAGE.PackageID  "
-				+ 		"from KID, GROUPOFKIDS, PACKAGE"
-				+ 		" where KID.groupOfkids_groupID= GROUPOFKIDS.GroupID "
+				+ 		"from KID, KID_GROUP, GROUPOFKIDS, PACKAGE"
+				+ 		" where KID_GROUP.GroupID= GROUPOFKIDS.GroupID"
+				+ 		" AND  KID_GROUP.KidID = KID.KidID"
 				+ 		" AND GROUPOFKIDS.PackageID = PACKAGE.PackageID "
 				+ 		" ORDER BY KID.KidID";
 		
