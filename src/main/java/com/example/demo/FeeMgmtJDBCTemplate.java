@@ -206,11 +206,11 @@ public class FeeMgmtJDBCTemplate implements FeeMgmtDAO{
 		// TODO Auto-generated method stub
 		logger.info("inside view Fees");
 		
-		String SQL = "SELECT * FROM FEEMGMT WHERE KIDID=? ORDER BY "
+		String SQL = "SELECT * FROM FEEMGMT WHERE KIDID=? AND GROUPID =? ORDER BY "
 				+ " DATEOFATTENDANCE DESC" ;
 		
 	    List <FeeMgmt> feeList = jdbcTemplateObject.query(SQL,new Object[] 
-	    		{data.getKidID() },new FeeMgmtMapper());
+	    		{data.getKidID(), data.getGroupID() },new FeeMgmtMapper());
 		
 	    return feeList;
 	}

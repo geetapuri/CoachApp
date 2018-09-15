@@ -29,11 +29,17 @@ private static Logger logger = LogManager.getLogger(GroupJDBCTemplate.class);
 		
 		List <GroupOfKids> result = null;
 		
+		String sql3= "SELECT PackageID FROM PACKAGE WHERE PackageName=?";
+		
+		String packageID =(String) jdbcTemplateObject.queryForObject(sql3, 
+					
+					new Object[] {data.getPackageName()}, String.class);
+		
 		String SQL = "INSERT INTO GROUPOFKIDS (GROUPNAME, FeeAmount, CoachID, PackageID) VALUES (?,?,?,?)";
 		logger.info("inserting groupname as : " + data.getGroupName());
 		
 		int resultOfQuery = jdbcTemplateObject.update( SQL, data.getGroupName(), data.getFeeAmount(),
-														data.getCoachID(), data.getPackageID()  );
+														data.getCoachID(), packageID  );
 		
 		logger.info("result of query after insert into groupofkids = "+ resultOfQuery);
 		

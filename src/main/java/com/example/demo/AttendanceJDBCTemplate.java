@@ -3,6 +3,8 @@ package com.example.demo;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -92,7 +94,7 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 						break;
 					case "2" :
 						
-						updateInvoiceHeaderForMonth(data.get(i).getKidID(),java.sql.Date.valueOf(data.get(i).getDate() ));
+						updateInvoiceHeaderForMonth(data.get(i).getKidID(),java.sql.Date.valueOf(data.get(i).getDate() ), data.get(i).getGroupID());
 						logger.info("in 2");
 						break;
 					case "3" :
@@ -106,7 +108,7 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 					
 				}
 				else if (packageID.equals(2)) {
-					updateInvoiceHeaderForMonth(data.get(i).getKidID(),java.sql.Date.valueOf(data.get(i).getDate() ));
+					updateInvoiceHeaderForMonth(data.get(i).getKidID(),java.sql.Date.valueOf(data.get(i).getDate() ), data.get(i).getGroupID());
 					logger.info("in 2");
 				}
 				
@@ -161,6 +163,7 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 		+ " 	WHERE KidID = ?";
 			jdbcTemplateObject.update(sql3, date,kidID);
 			
+		int rows1 = jdbcTemplateObject.update(sql3, date,kidID);	
 			
 		String sql4 = "SELECT PresentCounter FROM INVOICE_HEADER WHERE KidID=?";
 		//List <InvoiceHeader> invoiceList = jdbcTemplateObject.query(sql4, new InvoiceHeaderMapper());
@@ -179,22 +182,29 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 		
 	}
 	
-	public void updateInvoiceHeaderForMonth(String kidID, Date date){
+	public void updateInvoiceHeaderForMonth(String kidID, Date date, String groupID){
 		//get the date from  invoice header, compare months of invoice header date and attendance date
 		// if different, invoice due, and update the invoice header date, else : do nothing
 		
-		String sql2 = "SELECT MONTH(InvoiceDate) from INVOICE_HEADER WHERE KidID=?";
-		String invoiceDate = (String)jdbcTemplateObject.queryForObject(
-				sql2, new Object[] { kidID }, String.class);
+		String sql2 = "SELECT MONTH(InvoiceDate) from INVOICE_HEADER WHERE KidID=? AND GroupID=?";
+		int invoiceDate = jdbcTemplateObject.queryForObject(
+				sql2, new Object[] { kidID, groupID }, int.class);
 		
-		String sql5 = "SELECT MONTH(DateOfAttendance) FROM ATTENDANCE WHERE KID_KidID=? AND "
-				+ " DateOfAttendance=?";
+		/*String sql5 = "SELECT MONTH(DateOfAttendance) FROM ATTENDANCE WHERE KID_KidID=? AND "
+				+ " DateOfAttendance=? AND GROUPOFKIDS_GroupID=?";
 		String attendanceDate = (String)jdbcTemplateObject.queryForObject(
-				sql5, new Object[] { kidID, date }, String.class);
+				sql5, new Object[] { kidID, date, groupID }, String.class);*/
 		
-		if (invoiceDate.equals(attendanceDate)) {
+	  java.util.Calendar cal = java.util.Calendar.getInstance();
+	  cal.setTime(date);
+	  int attendanceDate = cal.get(java.util.Calendar.MONTH);
+		
+/*		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		int month = localDate.getMonthValue();
+*/		
+		if (invoiceDate == attendanceDate) {
 			String sql3 = "UPDATE INVOICE_HEADER SET InvoiceDate= ? WHERE KidID=?";
-			jdbcTemplateObject.update(sql3,date,kidID);
+			int rows = jdbcTemplateObject.update(sql3,date,kidID);
 		} else {
 			String sql4 = "UPDATE INVOICE_HEADER SET InvoiceDue= 'Y', InvoiceDate=? "
 					+ " WHERE KidID=? ";

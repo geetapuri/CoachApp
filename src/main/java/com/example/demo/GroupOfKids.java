@@ -11,6 +11,7 @@ public class GroupOfKids {
 	private String coachID;
 	private String feeAmount;
 	private String packageID;
+	private String packageName;
 	
 	public String getGroupName() {
 		return groupName;
@@ -41,6 +42,12 @@ public class GroupOfKids {
 	}
 	public void setPackageID(String packageID) {
 		this.packageID = packageID;
+	}
+	public String getPackageName() {
+		return packageName;
+	}
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
 	}
 
 }
