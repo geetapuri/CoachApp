@@ -183,34 +183,24 @@ private static Logger logger = LogManager.getLogger(AttendanceJDBCTemplate.class
 	}
 	
 	public void updateInvoiceHeaderForMonth(String kidID, Date date, String groupID){
-		//get the date from  invoice header, compare months of invoice header date and attendance date
-		// if different, invoice due, and update the invoice header date, else : do nothing
-		
-		String sql2 = "SELECT MONTH(InvoiceDate) from INVOICE_HEADER WHERE KidID=? AND GroupID=?";
-		int invoiceDate = jdbcTemplateObject.queryForObject(
-				sql2, new Object[] { kidID, groupID }, int.class);
-		
-		/*String sql5 = "SELECT MONTH(DateOfAttendance) FROM ATTENDANCE WHERE KID_KidID=? AND "
-				+ " DateOfAttendance=? AND GROUPOFKIDS_GroupID=?";
-		String attendanceDate = (String)jdbcTemplateObject.queryForObject(
-				sql5, new Object[] { kidID, date, groupID }, String.class);*/
+		//if first week of month, set invoice due as yes
 		
 	  java.util.Calendar cal = java.util.Calendar.getInstance();
 	  cal.setTime(date);
-	  int attendanceDate = cal.get(java.util.Calendar.MONTH);
+	  //int attendanceDate = cal.get(java.util.Calendar.MONTH);
+	  cal.setFirstDayOfWeek(java.util.Calendar.SUNDAY);
+	  
+	  int attendanceDate = cal.get(java.util.Calendar.DAY_OF_MONTH);
 		
 /*		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		int month = localDate.getMonthValue();
 */		
-		if (invoiceDate == attendanceDate) {
-			String sql3 = "UPDATE INVOICE_HEADER SET InvoiceDate= ? WHERE KidID=?";
-			int rows = jdbcTemplateObject.update(sql3,date,kidID);
-		} else {
-			String sql4 = "UPDATE INVOICE_HEADER SET InvoiceDue= 'Y', InvoiceDate=? "
-					+ " WHERE KidID=? ";
-				
+		if (attendanceDate<=7) {
 			
-			int rows = jdbcTemplateObject.update(sql4, date,kidID);
+		 	String sql4 = "UPDATE INVOICE_HEADER SET InvoiceDue= 'Y', InvoiceDate=? "
+					+ " , InvoiceAmount= InvoiceAmount+70 WHERE KidID=? AND GroupID=?  ";
+			
+			int rows = jdbcTemplateObject.update(sql4, date,kidID, groupID);
 		}
 		
 		
